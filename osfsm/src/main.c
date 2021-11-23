@@ -1,34 +1,50 @@
 #include<stdio.h>
-#include <fsm/fsmdef.h>
-#include <fsm/fsm.h>
 #include <time.h>
+#include <stdint.h>
+#include <delay.h>
+#include <fsm.h>
 
-void print1(fsm_flags_enu _flags) {
-	static uint8_t st = 0;
-	FSM_MAKE(&print1);
+void fsm_test1(uint8_t _mid, uint8_t *_st) {
+	uint8_t state = *_st;
 
-	if (st == 0) {
-		printf("STATE 0\r\n");
-		fflush(stdout);
-		FSM_DELAY_MS(1000);
-		st = 1;
-	} else if (st == 1) {
-		printf("STATE 1\r\n");
-		fflush(stdout);
+	printf("TEST-1-STATE : %d\r", state);
+	fflush(stdout);
 
-		FSM_DELAY_MS(100);
-		st = 0;
+	if (state == 0) {
+		DELAY(1000);
+		state = 1;
+	} else if (state == 1) {
+		DELAY(3000);
+		state = 0;
 	}
+
+	*_st = state;
 }
 
+void fsm_test2(uint8_t _mid, uint8_t *_st) {
+	uint8_t state = *_st;
+
+	printf("TEST-2-STATE : %d\r", state);
+	fflush(stdout);
+
+	if (state == 0) {
+		DELAY(500);
+		state = 10;
+	} else if (state == 10) {
+		DELAY(5000);
+		state = 0;
+	}
+
+	*_st = state;
+}
 int main(void) {
 	clock_t tick = 0;
-	SysTickCntr = 0;
 
 	printf("START\r\n");
 	fflush(stdout);
 
-	print1(0);
+	fsm_add(fsm_test1);
+	fsm_add(fsm_test2);
 
 	while (1) {
 		if (tick != clock()) {
