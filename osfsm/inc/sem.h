@@ -2,7 +2,7 @@
  * sem.h
  *
  *  Created on: Nov 23, 2021
- *      Author: Zeinab
+ *      Author: Amin Aghakhani
  */
 
 #ifndef SEM_H_
