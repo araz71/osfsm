@@ -8,23 +8,16 @@
 #ifndef FSM_H_
 #define FSM_H_
 
-#include <stdint.h>
-#include <delay.h>
+#include <def.h>
+#include <sem.h>
 
-#define FSM_MAX_AVAL		10
 typedef enum {
 	FSM_MODE_RUN,
 	FSM_MODE_DELAY,
 	FSM_MODE_WAIT,
+	FSM_MODE_SEM_WAIT,
 	FSM_MODE_FIN,
 } fsm_mode_enu;
-
-typedef enum {
-	RET_FALSE,
-	RET_TRUE,
-
-	RET_BUSY = 255,
-} ret_enu;
 
 typedef struct {
 	void (*fsm)(uint8_t _mid, uint8_t *_state);
@@ -34,15 +27,19 @@ typedef struct {
 	uint64_t timestamp;
 	uint32_t delay;
 	ret_enu (*waitCallback)(void);
+
+	sem_enu semaphore;
+
 } fsm_st;
 
 
 int8_t fsm_add(void (*_fsm)(uint8_t _mid, uint8_t *_state));
 void fsm_delay(uint8_t _mid, uint32_t _delay);
 void fsm_wait(uint8_t _mid, ret_enu (*_waitCallback)(void));
-
+void fsm_semWait(uint8_t _mid, sem_enu _sem);
 void fsm_manager();
+void fsm_init();
 
 #define DELAY(MS)			fsm_delay(_mid, MS)
-
+#define SEM_WAIT(SEM)		fsm_semWait(_mid, SEM)
 #endif /* FSM_H_ */

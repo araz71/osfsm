@@ -31,6 +31,20 @@ void fsm_wait(uint8_t _mid, ret_enu (*_waitCallback)(void)) {
 	_v_machines_[_mid].waitCallback = _waitCallback;
 }
 
+void fsm_semWait(uint8_t _mid, sem_enu _sem) {
+	if (sem_busy(_sem) == RET_FALSE) {
+		sem(_sem);
+	} else {
+		_v_machines_[_mid].mode = FSM_MODE_SEM_WAIT;
+	}
+	_v_machines_[_mid].semaphore = _sem;
+}
+
+void fsm_init() {
+	sem_init();
+	_v_machine_cntr_ = 0;
+}
+
 void fsm_manager() {
 	fsm_st *fsm_ptr;
 	for (int i = 0; i < _v_machine_cntr_; i++) {
@@ -44,6 +58,11 @@ void fsm_manager() {
 			fsm_ptr->fsm(i, &fsm_ptr->state);
 		} else if (fsm_ptr->mode == FSM_MODE_WAIT) {
 			if (fsm_ptr->waitCallback() == RET_TRUE) {
+				fsm_ptr->mode = FSM_MODE_RUN;
+			}
+		} else if (fsm_ptr->mode == FSM_MODE_SEM_WAIT) {
+			if (sem_busy(fsm_ptr->semaphore) != RET_BUSY) {
+				sem(fsm_ptr->semaphore);
 				fsm_ptr->mode = FSM_MODE_RUN;
 			}
 		}
