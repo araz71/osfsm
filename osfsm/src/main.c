@@ -1,98 +1,62 @@
 #include<stdio.h>
 #include <time.h>
 #include <stdint.h>
-#include <delay.h>
 #include <fsm.h>
-#include <def.h>
-#include <sem.h>
+#include <delay.h>
 
-void fsm_test1(uint8_t _mid, uint8_t *_st) {
-	uint8_t state = *_st;
-
-	debug("TEST-1-STATE : %d\r", state);
-	fflush(stdout);
-
-	if (state == 0) {
-		DELAY(1000);
-		state = 1;
-	} else if (state == 1) {
-		DELAY(1000);
-		state = 0;
+void fsm1(struct fsm_st* fsm) {
+	if (fsm->step == 0) {
+		printf("this is my first step\r\n");
+		fflush(stdout);
+		fsm_delay(fsm, 1);
+		fsm->step++;
+	} else if (fsm->step == 1) {
+		printf("this is my second step\r\n");
+		fflush(stdout);
+		fsm_delay(fsm, 1);
+		fsm->step++;
+	} else if (fsm->step == 2) {
+		fsm->step = 0;
 	}
-
-	*_st = state;
 }
 
-void fsm_test2(uint8_t _mid, uint8_t *_st) {
-	uint8_t state = *_st;
+uint8_t ready = 0;
+uint64_t ready_wait_timestamp;
 
-	debug("TEST-2-STATE : %d\r", state);
-	fflush(stdout);
-
-	if (state == 0) {
-		DELAY(500);
-		state = 10;
-	} else if (state == 10) {
-		DELAY(5000);
-		state = 0;
-	}
-
-	*_st = state;
+uint8_t wait_for_ready() {
+	return ready;
 }
 
-void fsm_semTest1(uint8_t _mid, uint8_t *_st) {
-	uint8_t state = *_st;
-
-	if (state == 0) {
-		SEM_WAIT(SEM_PRINT);
-		state = 1;
-	} else if (state == 1) {
-		debug("AT %u : NOW SEM IS MINE!\r", (uint32_t)SysTickCntr);
-		DELAY(1000);
-		state = 2;
-	} else if (state == 2) {
-		sem_free(SEM_PRINT);
-		state = 0;
+void fsm2(struct fsm_st* fsm) {
+	if (fsm->step == 0) {
+		fsm_wait(fsm, &wait_for_ready, 0);
+		fsm->step++;
+	} else if (fsm->step == 1) {
+		printf("chatdi\r\n");
+		fflush(stdout);
+		fsm->step = 2;
 	}
-
-	*_st = state;
 }
 
-void fsm_semTest2(uint8_t _mid, uint8_t *_st) {
-	uint8_t state = *_st;
-
-	if (state == 0) {
-		SEM_WAIT(SEM_PRINT);
-		state = 1;
-	} else if (state == 1) {
-		debug("AT %u : NOW SEM IS MINE!\r", (uint32_t)SysTickCntr);
-		DELAY(2000);
-		state = 2;
-	} else if (state == 2) {
-		sem_free(SEM_PRINT);
-		state = 0;
-	}
-
-	*_st = state;
-}
 int main(void) {
-	clock_t tick = 0;
 
-	fsm_init();
+	make_fsm(&fsm1);
+	make_fsm(&fsm2);
 
-	fsm_add(fsm_test1);
-	fsm_add(fsm_test2);
+	tick_cntr = 0;
 
-	fsm_add(fsm_semTest1);
-	fsm_add(fsm_semTest2);
-	while (1) {
-		if (tick != clock()) {
-			tick = clock();
-			SysTickCntr++;
+	time_t now = time(NULL);
+	ready_wait_timestamp = now;
+	while(1) {
+		fsm_manager();
+
+		if ((time(NULL) - now) > 0) {
+			now = time(NULL);
+			tick_cntr++;
 		}
 
-		fsm_manager();
+		if ((now - ready_wait_timestamp) >= 5)
+			ready = 1;
 	}
-
 	return 0;
 }
