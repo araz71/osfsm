@@ -13,6 +13,8 @@
 
 #include <delay.h>
 
+#define FSM_AUTO_STEP
+#define FSM_BREAK		return
 typedef enum
 {
 	FSM_RUN,
@@ -38,7 +40,11 @@ struct fsm_st
 struct fsm_st *make_fsm(void (*machine)(struct fsm_st* fsm));
 void fsm_stop(struct fsm_st* fsm);
 
-void fsm_delay(struct fsm_st *fsm, uint32_t delay);
-void fsm_wait(struct fsm_st *fsm, uint8_t (*wait_callback)(void), uint32_t delay);
+void fsm_delay(struct fsm_st *fsm, uint32_t delay, uint8_t step);
+void fsm_wait(struct fsm_st *fsm, uint8_t (*wait_callback)(void), uint32_t delay, uint8_t step);
+
+uint8_t fsm_check_delay(struct fsm_st *fsm, uint32_t delay);
+void fsm_make_time_point(struct fsm_st *fsm);
 
 void fsm_manager();
+void fsm_init();

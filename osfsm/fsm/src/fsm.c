@@ -32,19 +32,34 @@ struct fsm_st *make_fsm(void (*machine)(struct fsm_st* fsm))
 	return fsm;
 }
 
-void fsm_delay(struct fsm_st *fsm, uint32_t delay)
+void fsm_delay(struct fsm_st *fsm, uint32_t delay, uint8_t step)
 {
 	fsm->status = FSM_DELAY;
 	fsm->timestamp = get_timestamp();
 	fsm->delay = delay;
+	fsm->step += step;
 }
 
-void fsm_wait(struct fsm_st *fsm, uint8_t (*wait_callback)(void), uint32_t delay)
+void fsm_wait(struct fsm_st *fsm, uint8_t (*wait_callback)(void), uint32_t delay, uint8_t step)
 {
 	fsm->delay = delay;
 	fsm->flag_callback = wait_callback;
 	fsm->status = FSM_WAIT;
 	fsm->timestamp = get_timestamp();
+	fsm->step += step;
+}
+
+uint8_t fsm_check_delay(struct fsm_st *fsm, uint32_t delay) {
+	return (delay_ms(fsm->timestamp, delay));
+}
+
+void fsm_make_time_point(struct fsm_st *fsm) {
+	fsm->timestamp = get_timestamp();
+}
+
+void fsm_init() {
+	machines = NULL;
+	delay_init();
 }
 
 void fsm_manager()
@@ -54,12 +69,15 @@ void fsm_manager()
 	while (fsms != NULL) {
 		if (fsms->status == FSM_DELAY){
 			if (delay_ms(fsms->timestamp, fsms->delay))
+				fsms->timestamp = get_timestamp();
 				fsms->status = FSM_RUN;
 		} else if (fsms->status == FSM_WAIT) {
-			if (fsms->flag_callback())
+			if (fsms->flag_callback() ||
+					(fsms->delay != 0 && delay_ms(fsms->timestamp, fsms->delay)))
+			{
+				fsms->timestamp = get_timestamp();
 				fsms->status = FSM_RUN;
-			else if (fsms->delay != 0 && delay_ms(fsms->timestamp, fsms->delay))
-				fsms->status = FSM_RUN;
+			}
 		} else if (fsms->status == FSM_RUN) {
 			fsms->machine(fsms);
 		}
