@@ -52,7 +52,7 @@ int main(void) {
 
 		if ((time(NULL) - now) > 0) {
 			now = time(NULL);
-			tick_cntr++;
+			tick_count();
 		}
 
 		if ((now - ready_wait_timestamp) >= 5)
