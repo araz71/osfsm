@@ -37,11 +37,16 @@ struct fsm_st
 	uint8_t (*flag_callback)(void);
 };
 
+typedef struct fsm_st sfsm;
+
 struct fsm_st *make_fsm(void (*machine)(struct fsm_st* fsm));
 void fsm_stop(struct fsm_st* fsm);
 
-void fsm_delay(struct fsm_st *fsm, uint32_t delay, uint8_t step);
-void fsm_wait(struct fsm_st *fsm, uint8_t (*wait_callback)(void), uint32_t delay, uint8_t step);
+void fsm_delay(struct fsm_st *fsm, uint32_t delay);
+void fsm_delay_jump(sfsm *fsm, uint32_t delay, uint16_t step);
+
+void fsm_wait(struct fsm_st *fsm, uint8_t (*wait_callback)(void), uint32_t delay);
+void fsm_wait_jump(sfsm *fsm, uint8_t (*wait_callback)(void), uint32_t delay, uint16_t step);
 
 uint8_t fsm_check_delay(struct fsm_st *fsm, uint32_t delay);
 void fsm_make_time_point(struct fsm_st *fsm);
