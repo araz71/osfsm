@@ -69,7 +69,6 @@ void fsm_make_time_point(sfsm *fsm) {
 
 void fsm_init() {
 	machines = NULL;
-	delay_init();
 }
 
 void fsm_manager()

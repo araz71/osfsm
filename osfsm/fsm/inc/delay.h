@@ -12,11 +12,12 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-uint64_t tick_cntr;
+extern uint64_t SystemTickCntr;
 
-#define tick_count()		tick_cntr++
-#define get_timestamp()		tick_cntr
-#define delay_tick()		tick_cntr++
+#define get_timestamp()		SystemTickCntr
+
+void wait_s(uint32_t delay);
+void wait_ms(uint32_t delay);
 uint8_t delay_ms(uint64_t timestamp, uint32_t delay);
 void delay_init();
 #endif /* DELAY_H_ */
