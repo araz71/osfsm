@@ -4,7 +4,8 @@
  *  Created on: Apr 22, 2022
  *      Author: Zeinab
  */
-
+#ifndef _H_FSM_H
+#define _H_FSM_H
 
 #include <stdint.h>
 #include <stdio.h>
@@ -53,3 +54,5 @@ void fsm_make_time_point(struct fsm_st *fsm);
 
 void fsm_manager();
 void fsm_init();
+
+#endif
