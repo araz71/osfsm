@@ -6,6 +6,7 @@
  */
 
 #include <fsm.h>
+#include <assert.h>
 
 static sfsm *machines = NULL;
 
@@ -13,7 +14,8 @@ sfsm *make_fsm(void (*machine)(struct fsm_st* fsm))
 {
 	sfsm *fsm = (struct fsm_st *)malloc(sizeof(struct fsm_st));
 
-	if (fsm == NULL) return NULL;
+	assert(fsm != NULL);
+
 	memset((uint8_t *)fsm , 0, sizeof(sfsm));
 
 	if (machines == NULL)
@@ -30,6 +32,35 @@ sfsm *make_fsm(void (*machine)(struct fsm_st* fsm))
 	fsm->status = FSM_RUN;
 
 	return fsm;
+}
+
+void fsm_signal(signal_enu signal) {
+	sfsm *fsm = machines;
+	while (fsm != NULL) {
+		if (fsm->signals & signal) {
+			fsm->signal_flags |= signal;
+		}
+		fsm = fsm->next;
+	}
+}
+
+uint8_t fsm_signal_ready(sfsm *fsm, signal_enu signal) {
+	if (fsm->signal_flags & signal) {
+		fsm->signal_flags &= ~signal;
+		return 1;
+	}
+	return 0;
+}
+
+void fsm_signal_register(sfsm *fsm, signal_enu signal) {
+	fsm->signals |= signal;
+}
+void fsm_signal_unregister(sfsm *fsm, signal_enu signal) {
+	fsm->signals &= ~signal;
+}
+
+void fsm_sleep(sfsm *fsm) {
+	fsm->status = FSM_SLEEP;
 }
 
 void fsm_delay(sfsm *fsm, uint32_t delay)
@@ -91,7 +122,17 @@ void fsm_manager()
 			}
 		} else if (fsms->status == FSM_RUN) {
 			fsms->machine(fsms);
+		} else if (fsms->status == FSM_BLOCK_FOR_SIGNAL) {
+			if (fsms->signal_flags & fsms->block_template) {
+				fsms->status = FSM_RUN;
+			}
 		}
 		fsms = fsms->next;
 	}
+}
+
+void fsm_wait_for_signal(sfsm *fsm, signal_enu signal, uint16_t step) {
+	fsm->status = FSM_BLOCK_FOR_SIGNAL;
+	fsm->block_template = signal;
+	fsm->step = step;
 }
