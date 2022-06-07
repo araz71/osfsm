@@ -14,6 +14,8 @@
 
 #include <delay.h>
 
+#define FSM_AVAL				10
+
 #define FSM_AUTO_STEP
 #define FSM_BREAK				return
 #define FSM_CURRENT_STEP		fsm->step
@@ -27,6 +29,7 @@
 
 typedef enum
 {
+	FSM_STOP,
 	FSM_RUN,
 	FSM_DELAY,
 	FSM_WAIT,
@@ -47,8 +50,6 @@ typedef enum {
 struct fsm_st
 {
 	void (*machine)(struct fsm_st* fsm);
-
-	struct fsm_st *next;
 
 	fsm_status_enu status;
 	uint16_t step;

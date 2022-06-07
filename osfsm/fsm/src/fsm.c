@@ -8,25 +8,21 @@
 #include <fsm.h>
 #include <assert.h>
 
-static sfsm *machines = NULL;
+static sfsm machines[FSM_AVAL];
 
 sfsm *make_fsm(void (*machine)(struct fsm_st* fsm))
 {
-	sfsm *fsm = (struct fsm_st *)malloc(sizeof(struct fsm_st));
+	sfsm *fsm = NULL;
 
-	assert(fsm != NULL);
+	for (int i = 0; i < FSM_AVAL; i++) {
+		if (machines[i].status == FSM_STOP) {
+			fsm = &machines[i];
+			break;
+		}
+	}
+	if (fsm == NULL) return NULL;
 
 	memset((uint8_t *)fsm , 0, sizeof(sfsm));
-
-	if (machines == NULL)
-		machines = fsm;
-	else {
-		sfsm *fsm_ptr = machines;
-		while (fsm_ptr->next != NULL)
-			fsm_ptr = fsm_ptr->next;
-
-		fsm_ptr->next = fsm;
-	}
 
 	fsm->machine = machine;
 	fsm->status = FSM_RUN;
@@ -36,11 +32,10 @@ sfsm *make_fsm(void (*machine)(struct fsm_st* fsm))
 
 void fsm_signal(signal_enu signal) {
 	sfsm *fsm = machines;
-	while (fsm != NULL) {
-		if (fsm->signals & signal) {
+	for (int i = 0; i < FSM_AVAL; i++) {
+		fsm = &machines[i];
+		if (fsm->signals & signal)
 			fsm->signal_flags |= signal;
-		}
-		fsm = fsm->next;
 	}
 }
 
@@ -99,17 +94,21 @@ void fsm_make_time_point(sfsm *fsm) {
 }
 
 void fsm_init() {
-	machines = NULL;
+	for (int i = 0; i < FSM_AVAL; i++) {
+		memset((uint8_t *)&machines[i], 0, sizeof(sfsm));
+	}
 }
 
 void fsm_manager()
 {
-	sfsm *fsms = machines;
+	sfsm *fsms = NULL;
 
-	while (fsms != NULL) {
+	for (int i = 0; i < FSM_AVAL; i++) {
+		fsms = &machines[i];
+		if (fsms->status == FSM_STOP) continue;
+
 		if (fsms->status == FSM_DELAY) {
-			if (delay_ms(fsms->timestamp, fsms->delay))
-			{
+			if (delay_ms(fsms->timestamp, fsms->delay)) {
 				fsms->timestamp = get_timestamp();
 				fsms->status = FSM_RUN;
 			}
@@ -127,7 +126,6 @@ void fsm_manager()
 				fsms->status = FSM_RUN;
 			}
 		}
-		fsms = fsms->next;
 	}
 }
 
