@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../comm_protocol/src/danish.h
+stdint.h
+-
+
+/home/amin/Projects/osfsm/osfsm/comm_protocol/test/main.c
+danish.h
+/home/amin/Projects/osfsm/osfsm/comm_protocol/test/danish.h
+

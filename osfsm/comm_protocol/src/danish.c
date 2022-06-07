@@ -46,8 +46,9 @@ int8_t danish_ach(uint8_t *packet, uint8_t len, danish_st *result) {
 	if (checksum != received_checksum) return -1;
 
 	result->address = packet[PACKET_ADDRESS];
-	result->regID = (packet[PAKCET_REG_ID_MSB] << 8) + (packet[PACKET_REG_ID_LSB]);
+	result->regID = (packet[PACKET_REG_ID_MSB] << 8) + (packet[PACKET_REG_ID_LSB]);
 	result->len = packet[PACKET_LEN];
 	memcpy(result->data, &packet[PACKET_DATA], result->len);
 	return 1;
+#endif
 }

@@ -4,6 +4,9 @@
 #include <fsm.h>
 #include <delay.h>
 
+uint64_t tick_cntr = 0;
+uint64_t SystemTickCntr = 0;
+
 void fsm1(struct fsm_st* fsm) {
 	if (fsm->step == 0) {
 		printf("this is my first step\r\n");
@@ -49,14 +52,6 @@ int main(void) {
 	ready_wait_timestamp = now;
 	while(1) {
 		fsm_manager();
-
-		if ((time(NULL) - now) > 0) {
-			now = time(NULL);
-			tick_count();
-		}
-
-		if ((now - ready_wait_timestamp) >= 5)
-			ready = 1;
 	}
 	return 0;
 }

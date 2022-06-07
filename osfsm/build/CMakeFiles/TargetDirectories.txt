@@ -1,0 +1,6 @@
+/home/amin/Projects/osfsm/osfsm/build/CMakeFiles/rebuild_cache.dir
+/home/amin/Projects/osfsm/osfsm/build/CMakeFiles/edit_cache.dir
+/home/amin/Projects/osfsm/osfsm/build/CMakeFiles/osfsm.dir
+/home/amin/Projects/osfsm/osfsm/build/comm_protocol/CMakeFiles/rebuild_cache.dir
+/home/amin/Projects/osfsm/osfsm/build/comm_protocol/CMakeFiles/edit_cache.dir
+/home/amin/Projects/osfsm/osfsm/build/comm_protocol/CMakeFiles/COMM_PROTOCOL_TEST.dir

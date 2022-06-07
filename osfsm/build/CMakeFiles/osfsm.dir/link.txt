@@ -1,0 +1,1 @@
+/usr/bin/cc   -rdynamic CMakeFiles/osfsm.dir/src/main.c.o CMakeFiles/osfsm.dir/fsm/src/fsm.c.o CMakeFiles/osfsm.dir/fsm/src/delay.c.o CMakeFiles/osfsm.dir/fsm/src/fifo.c.o  -o osfsm 

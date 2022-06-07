@@ -12,6 +12,7 @@ typedef enum {
 	PACKET_REG_ID_MSB,
 	PACKET_REG_ID_LSB,
 	PACKET_LEN,
+	PACKET_DATA,
 } packet_params_enu;
 
 typedef enum {

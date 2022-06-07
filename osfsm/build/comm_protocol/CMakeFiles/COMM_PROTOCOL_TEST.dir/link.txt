@@ -1,0 +1,1 @@
+/usr/bin/cc   -rdynamic CMakeFiles/COMM_PROTOCOL_TEST.dir/test/main.c.o CMakeFiles/COMM_PROTOCOL_TEST.dir/src/danish.c.o  -o COMM_PROTOCOL_TEST 
