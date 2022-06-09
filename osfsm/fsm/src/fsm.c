@@ -123,6 +123,7 @@ void fsm_manager()
 			fsms->machine(fsms);
 		} else if (fsms->status == FSM_BLOCK_FOR_SIGNAL) {
 			if (fsms->signal_flags & fsms->block_template) {
+				fsms->timestamp = get_timestamp();
 				fsms->status = FSM_RUN;
 			}
 		}
