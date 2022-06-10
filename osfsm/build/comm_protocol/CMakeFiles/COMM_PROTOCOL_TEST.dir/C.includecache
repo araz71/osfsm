@@ -10,7 +10,7 @@
 stdint.h
 -
 
-/home/amin/Projects/osfsm/osfsm/comm_protocol/test/main.c
+/home/amin/Projects/osfsm/osfsm/comm_protocol/src/danish.c
 danish.h
-/home/amin/Projects/osfsm/osfsm/comm_protocol/test/danish.h
+-
 

@@ -23,8 +23,21 @@ int main() {
 	uint8_t my_data[20];
 	my_packet.data = my_data;
 	int8_t ret = danish_ach(result, len, &my_packet);
+	if (ret != 1) printf("%d : packet ach failed\r\n");
 
 	if (my_packet.function != FUNC_WRITE) printf("%d : packet ach failed", __LINE__);
+	if (my_packet.len != 10) printf("%d : packet ach failed in data len(%d)\r\n", __LINE__, my_packet.len);
+	if (my_packet.address != 10) printf("%d : packet ach failed in address(%d)\r\n", __LINE__, my_packet.address);
+	if (my_packet.regID != 1203) printf("%d : packet ach failed in register id(%d)\r\n", __LINE__, my_packet.regID);
+	if (memcmp(my_packet.data, my_data, 10) != 0) printf("%d : packet ach failed in data\r\n", __LINE__);
+
+	printf("Packet created and openned successfully :");
+	printf("\tpacket size : %d\r\n", len);
+	printf("\tpacket : ");
+	for (int i = 0; i < len; i++) {
+		printf("%02x ", result[i]);
+	}
+	printf("\r\n");
 
 	return 1;
 }

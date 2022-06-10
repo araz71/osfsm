@@ -23,7 +23,7 @@ uint8_t danish_make(uint8_t address, function_enu function, uint16_t regID, uint
 		checksum += packet[i];
 
 	packet[cntr++] = checksum >> 8;
-	packet[cntr] = checksum;
+	packet[cntr++] = checksum;
 #endif
 	return cntr;
 }
