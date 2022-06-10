@@ -2,6 +2,8 @@
 #define _DANISH_H_
 
 #include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
 
 #define DANISH_MAX_DATA_SIZE		196
 #define DANISH_MAX_PACKET_SIZE		DANISH_MAX_DATA_SIZE + 7
