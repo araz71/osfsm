@@ -10,8 +10,8 @@ void danish_add_register(uint16_t regID, uint8_t *pbuf, uint8_t size, filled_cal
 		return;
 
 	registers[number_of_registered_ids].regID = regID;
-	registers[number_of_registered_ids].data = pbuf;
-	registers[number_of_registered_ids].filled_callback = filled_callback_ptr;
+	registers[number_of_registered_ids].ptr = pbuf;
+	registers[number_of_registered_ids].filled_callback = filled_callback;
 	registers[number_of_registered_ids].read_callback = read_callback;
 	registers[number_of_registered_ids].size = size;
 	registers[number_of_registered_ids].flags = 0;
@@ -31,7 +31,7 @@ void danish_req_reg_write(uint16_t regID, uint8_t *data) {
 	if (reg == NULL) return;
 
 	memcpy(reg->ptr, data, reg->size);
-	reg->flag |= 1;
+	reg->flags |= 1;
 }
 
 void danish_req_reg_read(uint16_t regID, void (*callback(int8_t ack))) {
@@ -39,10 +39,10 @@ void danish_req_reg_read(uint16_t regID, void (*callback(int8_t ack))) {
 	link_reg_st *reg = find_register_inf(regID);
 	if (reg == NULL) return;
 
-	reg->flag |=2;
+	reg->flags |=2;
 }
 
-void danish_register_output(void (*write_cb)(uint8_t *data, uint8_t len)) {
+void danish_register_output(void (*write_cb)(uint8_t *data, uint8_t size, void (*transmitted_cb)(int8_t tx))) {
 	write_callback_ptr = write_cb;	
 }
 
