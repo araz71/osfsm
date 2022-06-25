@@ -4,7 +4,7 @@
  *  Created on: Apr 22, 2022
  *      Author: Zeinab
  */
-
+#ifndef MY_DELAY
 #include <delay.h>
 
 uint8_t delay_ms(uint64_t timestamp, uint32_t delay)
@@ -25,3 +25,4 @@ void wait_ms(uint32_t delay) {
 	uint64_t ts = get_timestamp();
 	while (!delay_ms(ts, delay));
 }
+#endif

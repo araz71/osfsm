@@ -1,6 +1,6 @@
 #include <fifo.h>
 
-#define FIFO_MAX_AVAL	2
+#define FIFO_MAX_AVAL	5
 
 #pragma pack(push)
 #pragma pack(1)
