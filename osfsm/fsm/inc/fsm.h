@@ -15,6 +15,7 @@
 #include <delay.h>
 
 #define FSM_AVAL				10
+#define TIMER_AVAL				5
 
 #define FSM_AUTO_STEP
 #define FSM_BREAK				return
@@ -47,6 +48,11 @@ typedef enum {
 	SIGNAL_USR_5	= 0x40,
 } signal_enu;
 
+typedef enum {
+	TIMER_STOP,
+	TIMER_RUN,
+} timer_state_enu;
+
 struct fsm_st
 {
 	void (*machine)(struct fsm_st* fsm);
@@ -64,6 +70,14 @@ struct fsm_st
 
 	uint8_t (*flag_callback)(void);
 };
+
+typedef struct {
+	void (*callback)(void);
+
+	uint32_t delay;
+	uint64_t timestamp;
+	timer_state_enu state;
+} stimer;
 
 typedef struct fsm_st sfsm;
 
@@ -89,5 +103,7 @@ void fsm_make_time_point(struct fsm_st *fsm);
 
 void fsm_manager();
 void fsm_init();
+
+uint8_t fsm_make_timer(uint32_t delay, void (*callback)(void));
 
 #endif

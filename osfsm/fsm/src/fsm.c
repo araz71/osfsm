@@ -9,6 +9,7 @@
 #include <assert.h>
 
 static sfsm machines[FSM_AVAL];
+static stimer timers[TIMER_AVAL];
 
 sfsm *make_fsm(void (*machine)(struct fsm_st* fsm))
 {
@@ -128,10 +129,34 @@ void fsm_manager()
 			}
 		}
 	}
+
+	for (int i = 0; i < TIMER_AVAL; i++) {
+		if (timers[i].state == TIMER_RUN) {
+			if (delay_ms(timers[i].timestamp, timers[i].delay)) {
+				timers[i].state = TIMER_STOP;
+				timers[i].callback();
+			}
+		}
+	}
 }
 
 void fsm_wait_for_signal(sfsm *fsm, signal_enu signal, uint16_t step) {
 	fsm->status = FSM_BLOCK_FOR_SIGNAL;
 	fsm->block_template = signal;
 	fsm->step = step;
+}
+
+uint8_t fsm_make_timer(uint32_t delay, void (*callback)(void)) {
+	uint8_t timer_aval = 0xFF;
+	for (uint8_t i = 0; i < TIMER_AVAL; i++) {
+		if (timers[i].state == TIMER_STOP) {
+			timer_aval = i;
+			break;
+		}
+	}
+	if (timer_aval == 0xFF) return 0;
+	timers[timer_aval].timestamp = get_timestamp();
+	timers[timer_aval].state = TIMER_RUN;
+	timers[timer_aval].callback = callback;
+	return 1;
 }
