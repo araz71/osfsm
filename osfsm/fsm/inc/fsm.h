@@ -105,5 +105,7 @@ void fsm_manager();
 void fsm_init();
 
 uint8_t fsm_make_timer(uint32_t delay, void (*callback)(void));
+void fsm_timer_stop(uint8_t* timer);
+void fsm_timer_restart(uint8_t timer);
 
 #endif

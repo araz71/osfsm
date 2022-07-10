@@ -154,9 +154,21 @@ uint8_t fsm_make_timer(uint32_t delay, void (*callback)(void)) {
 			break;
 		}
 	}
-	if (timer_aval == 0xFF) return 0;
+	if (timer_aval == 0xFF) return 0xFF;
 	timers[timer_aval].timestamp = get_timestamp();
 	timers[timer_aval].state = TIMER_RUN;
 	timers[timer_aval].callback = callback;
-	return 1;
+	return timer_aval;
+}
+
+void fsm_timer_stop(uint8_t* timer) {
+	if ((*timer) != 0xFF) {
+		if ((*timer) < TIMER_AVAL)
+			timers[*timer].state = TIMER_STOP;
+		*timer = 0xFF;
+	}
+}
+
+void fsm_timer_restart(uint8_t timer) {
+	timers[timer].timestamp = get_timestamp();
 }
