@@ -10,6 +10,25 @@
 
 static sfsm machines[FSM_AVAL];
 static stimer timers[TIMER_AVAL];
+static uint16_t fsm_mutex = 0;
+
+void fsm_mutex_lock(sfsm* fsm, fsm_mutex_enu mutex) {
+	if (fsm_mutex & mutex) {
+		fsm->status = FSM_WAIT_FOR_MUTEX;
+		fsm->mutex |= mutex;
+	} else {
+		fsm_mutex |= mutex;
+	}
+}
+
+void fsm_mutex_unlock(fsm_mutex_enu mutex) {
+	fsm_mutex &= ~mutex;
+}
+
+uint8_t fsm_mutex_check(fsm_mutex_enu mutex) {
+	if (fsm_mutex & mutex) return 1;
+	return 0;
+}
 
 sfsm *make_fsm(void (*machine)(struct fsm_st* fsm))
 {
@@ -127,6 +146,12 @@ void fsm_manager()
 				fsms->timestamp = get_timestamp();
 				fsms->status = FSM_RUN;
 			}
+		} else if (fsms->status == FSM_WAIT_FOR_MUTEX) {
+			if ((fsms->mutex & fsm_mutex) == 0) {
+				fsms->status = FSM_RUN;
+				fsm_mutex |= fsms->mutex;
+				fsms->mutex = 0;
+			}
 		}
 	}
 
@@ -158,6 +183,7 @@ uint8_t fsm_make_timer(uint32_t delay, void (*callback)(void)) {
 	timers[timer_aval].timestamp = get_timestamp();
 	timers[timer_aval].state = TIMER_RUN;
 	timers[timer_aval].callback = callback;
+	timers[timer_aval].delay = delay;
 	return timer_aval;
 }
 
@@ -172,3 +198,5 @@ void fsm_timer_stop(uint8_t* timer) {
 void fsm_timer_restart(uint8_t timer) {
 	timers[timer].timestamp = get_timestamp();
 }
+
+

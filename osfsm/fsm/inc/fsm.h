@@ -34,6 +34,7 @@ typedef enum
 	FSM_RUN,
 	FSM_DELAY,
 	FSM_WAIT,
+	FSM_WAIT_FOR_MUTEX,
 	FSM_BLOCK_FOR_SIGNAL,
 	FSM_SLEEP,
 } fsm_status_enu;
@@ -47,6 +48,25 @@ typedef enum {
 	SIGNAL_USR_4	= 0x20,
 	SIGNAL_USR_5	= 0x40,
 } signal_enu;
+
+typedef enum {
+	FSM_MUTEX_1		= 0x0001,
+	FSM_MUTEX_2		= 0x0002,
+	FSM_MUTEX_3		= 0x0004,
+	FSM_MUTEX_4		= 0x0008,
+	FSM_MUTEX_5		= 0x0010,
+	FSM_MUTEX_6		= 0x0020,
+	FSM_MUTEX_7		= 0x0040,
+	FSM_MUTEX_8		= 0x0080,
+	FSM_MUTEX_9		= 0x0100,
+	FSM_MUTEX_10	= 0x0200,
+	FSM_MUTEX_11	= 0x0400,
+	FSM_MUTEX_12	= 0x0800,
+	FSM_MUTEX_13	= 0x1000,
+	FSM_MUTEX_14	= 0x2000,
+	FSM_MUTEX_15	= 0x4000,
+	FSM_MUTEX_16	= 0x8000,
+} fsm_mutex_enu;
 
 typedef enum {
 	TIMER_STOP,
@@ -66,6 +86,8 @@ struct fsm_st
 	uint8_t signals;
 	uint8_t signal_flags;
 
+	uint16_t mutex;
+
 	uint8_t block_template;
 
 	uint8_t (*flag_callback)(void);
@@ -80,6 +102,10 @@ typedef struct {
 } stimer;
 
 typedef struct fsm_st sfsm;
+
+void fsm_mutex_lock(sfsm* fsm, fsm_mutex_enu mutex);
+void fsm_mutex_unlock(fsm_mutex_enu mutex);
+uint8_t fsm_mutex_check(fsm_mutex_enu mutex);
 
 struct fsm_st *make_fsm(void (*machine)(struct fsm_st* fsm));
 void fsm_stop(struct fsm_st* fsm);
