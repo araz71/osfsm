@@ -73,6 +73,9 @@ typedef enum {
 	TIMER_RUN,
 } timer_state_enu;
 
+#pragma pack(push)
+#pragma pack(1)
+
 struct fsm_st
 {
 	void (*machine)(struct fsm_st* fsm);
@@ -92,6 +95,7 @@ struct fsm_st
 
 	uint8_t (*flag_callback)(void);
 };
+#pragma pack(pop)
 
 typedef struct {
 	void (*callback)(void);
@@ -104,7 +108,7 @@ typedef struct {
 typedef struct fsm_st sfsm;
 
 void fsm_mutex_lock(sfsm* fsm, fsm_mutex_enu mutex);
-void fsm_mutex_unlock(fsm_mutex_enu mutex);
+void fsm_mutex_unlock(sfsm* fsm, fsm_mutex_enu mutex);
 uint8_t fsm_mutex_check(fsm_mutex_enu mutex);
 
 struct fsm_st *make_fsm(void (*machine)(struct fsm_st* fsm));

@@ -21,12 +21,13 @@ void fsm_mutex_lock(sfsm* fsm, fsm_mutex_enu mutex) {
 	}
 }
 
-void fsm_mutex_unlock(fsm_mutex_enu mutex) {
+void fsm_mutex_unlock(sfsm* fsm, fsm_mutex_enu mutex) {
 	fsm_mutex &= ~mutex;
+	fsm->mutex &= ~mutex;
 }
 
 uint8_t fsm_mutex_check(fsm_mutex_enu mutex) {
-	if (fsm_mutex & mutex) return 1;
+	if (!(fsm_mutex & mutex)) return 1;
 	return 0;
 }
 

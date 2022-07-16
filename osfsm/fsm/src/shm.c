@@ -6,6 +6,7 @@ static uint8_t shm_counter = 0;
 uint8_t shm_lock(shm_id id, char* pid) {
 	if (shms[id].lock == 0 || shms[id].pid == pid) {
 		shms[id].lock = 1;
+		shms[id].pid = pid;
 		return 1;
 	}
 	return 0;
@@ -14,6 +15,7 @@ uint8_t shm_lock(shm_id id, char* pid) {
 uint8_t shm_unlock(shm_id id, char* pid) {
 	if (shms[id].lock == 0 || shms[id].pid == pid) {
 		shms[id].lock = 0;
+		shms[id].pid = NULL;
 		return 1;
 	}
 	return 0;
