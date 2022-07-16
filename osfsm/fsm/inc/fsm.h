@@ -15,7 +15,7 @@
 #include <delay.h>
 
 #define FSM_AVAL				10
-#define TIMER_AVAL				5
+#define TIMER_AVAL				10
 
 #define FSM_AUTO_STEP
 #define FSM_BREAK				return
@@ -95,7 +95,6 @@ struct fsm_st
 
 	uint8_t (*flag_callback)(void);
 };
-#pragma pack(pop)
 
 typedef struct {
 	void (*callback)(void);
@@ -104,6 +103,7 @@ typedef struct {
 	uint64_t timestamp;
 	timer_state_enu state;
 } stimer;
+#pragma pack(pop)
 
 typedef struct fsm_st sfsm;
 
