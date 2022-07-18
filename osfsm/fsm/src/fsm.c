@@ -197,7 +197,8 @@ void fsm_timer_stop(uint8_t* timer) {
 }
 
 void fsm_timer_restart(uint8_t timer) {
-	timers[timer].timestamp = get_timestamp();
+	if (timer != 0xFF && timer < TIMER_AVAL)
+		timers[timer].timestamp = get_timestamp();
 }
 
 
