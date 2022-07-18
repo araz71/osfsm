@@ -12,6 +12,22 @@ static sfsm machines[FSM_AVAL];
 static stimer timers[TIMER_AVAL];
 static uint16_t fsm_mutex = 0;
 
+void mutex_lock(fsm_mutex_enu mutex) {
+	fsm_mutex |= mutex;
+}
+void mutex_unlock(fsm_mutex_enu mutex) {
+	fsm_mutex &= ~mutex;
+}
+uint8_t mutex_busy(fsm_mutex_enu mutex) {
+	if (fsm_mutex & mutex) return 1;
+	return 0;
+}
+
+uint8_t fsm_mutex_check(fsm_mutex_enu mutex) {
+	if (!(fsm_mutex & mutex)) return 1;
+	return 0;
+}
+
 void fsm_mutex_lock(sfsm* fsm, fsm_mutex_enu mutex) {
 	if (fsm_mutex & mutex) {
 		fsm->status = FSM_WAIT_FOR_MUTEX;
@@ -24,11 +40,6 @@ void fsm_mutex_lock(sfsm* fsm, fsm_mutex_enu mutex) {
 void fsm_mutex_unlock(sfsm* fsm, fsm_mutex_enu mutex) {
 	fsm_mutex &= ~mutex;
 	fsm->mutex &= ~mutex;
-}
-
-uint8_t fsm_mutex_check(fsm_mutex_enu mutex) {
-	if (!(fsm_mutex & mutex)) return 1;
-	return 0;
 }
 
 sfsm *make_fsm(void (*machine)(struct fsm_st* fsm))

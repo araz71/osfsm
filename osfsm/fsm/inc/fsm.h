@@ -111,6 +111,10 @@ void fsm_mutex_lock(sfsm* fsm, fsm_mutex_enu mutex);
 void fsm_mutex_unlock(sfsm* fsm, fsm_mutex_enu mutex);
 uint8_t fsm_mutex_check(fsm_mutex_enu mutex);
 
+void mutex_lock(fsm_mutex_enu mutex);
+void mutex_unlock(fsm_mutex_enu mutex);
+uint8_t mutex_busy(fsm_mutex_enu mutex);
+
 struct fsm_st *make_fsm(void (*machine)(struct fsm_st* fsm));
 void fsm_stop(struct fsm_st* fsm);
 
