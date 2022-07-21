@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 uint8_t fifo_req(uint8_t *_ptr, uint16_t _size, uint16_t _max_elem_aval);
 uint8_t fifo_push(uint8_t _fifo_id, uint8_t *_data);

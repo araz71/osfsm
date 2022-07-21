@@ -52,7 +52,10 @@ sfsm *make_fsm(void (*machine)(struct fsm_st* fsm))
 			break;
 		}
 	}
-	if (fsm == NULL) return NULL;
+	if (fsm == NULL) {
+		printf("No space avaliable to mke fsm\r\n");
+		assert(0);
+	}
 
 	memset((uint8_t *)fsm , 0, sizeof(sfsm));
 
@@ -144,6 +147,7 @@ void fsm_manager()
 				fsms->timestamp = get_timestamp();
 				fsms->status = FSM_RUN;
 			}
+
 		} else if (fsms->status == FSM_WAIT) {
 			if (fsms->flag_callback() ||
 					(fsms->delay != 0 && delay_ms(fsms->timestamp, fsms->delay)))
@@ -151,13 +155,16 @@ void fsm_manager()
 				fsms->timestamp = get_timestamp();
 				fsms->status = FSM_RUN;
 			}
+
 		} else if (fsms->status == FSM_RUN) {
 			fsms->machine(fsms);
+
 		} else if (fsms->status == FSM_BLOCK_FOR_SIGNAL) {
 			if (fsms->signal_flags & fsms->block_template) {
 				fsms->timestamp = get_timestamp();
 				fsms->status = FSM_RUN;
 			}
+
 		} else if (fsms->status == FSM_WAIT_FOR_MUTEX) {
 			if ((fsms->mutex & fsm_mutex) == 0) {
 				fsms->status = FSM_RUN;
