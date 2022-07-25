@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define FIFO_INIT_VALUE		0xFF
+
 uint8_t fifo_req(uint8_t *_ptr, uint16_t _size, uint16_t _max_elem_aval);
 uint8_t fifo_push(uint8_t _fifo_id, uint8_t *_data);
 uint8_t fifo_full(uint8_t _fifo_id);

@@ -31,7 +31,7 @@ uint8_t fifo_req(uint8_t *_ptr, uint16_t _size, uint16_t _max_elem_aval) {
 }
 
 uint8_t fifo_push(uint8_t _fifo_id, uint8_t *_data) {
-	if (fifo_full(_fifo_id)) {
+	if (_fifo_id == FIFO_INIT_VALUE || fifo_full(_fifo_id)) {
 		return 0;
 	}
 	Fifo[_fifo_id].rear = (Fifo[_fifo_id].rear + 1) % Fifo[_fifo_id].max_elem_aval;
@@ -39,15 +39,21 @@ uint8_t fifo_push(uint8_t _fifo_id, uint8_t *_data) {
 	return 1;
 }
 uint8_t fifo_full(uint8_t _fifo_id) {
+	if (_fifo_id == FIFO_INIT_VALUE)
+		return 1;
+
 	if (Fifo[_fifo_id].front == ((Fifo[_fifo_id].rear + 1) % Fifo[_fifo_id].max_elem_aval)) return 1;
 	return 0;
 }
 uint8_t fifo_empty(uint8_t _fifo_id) {
+	if (_fifo_id == FIFO_INIT_VALUE)
+		return 1;
+
 	if (Fifo[_fifo_id].front == Fifo[_fifo_id].rear) return 1;
 	return 0;
 }
 uint8_t *fifo_pop(uint8_t _fifo_id) {
-	if (fifo_empty(_fifo_id)) return 0;
+	if (_fifo_id == FIFO_INIT_VALUE || fifo_empty(_fifo_id)) return 0;
 	Fifo[_fifo_id].front = (Fifo[_fifo_id].front + 1) % Fifo[_fifo_id].max_elem_aval;
 	return (Fifo[_fifo_id].ptr + (Fifo[_fifo_id].front * Fifo[_fifo_id].size));
 }
@@ -64,11 +70,13 @@ void fifo_free_elem(uint8_t _fifo_id) {
 }
 
 uint16_t fifo_size(uint8_t _fifo_id) {
+	if (_fifo_id == FIFO_INIT_VALUE) return 0;
 	if (Fifo[_fifo_id].rear < Fifo[_fifo_id].front) return (Fifo[_fifo_id].max_elem_aval - Fifo[_fifo_id].front + Fifo[_fifo_id].rear);
 	else return (Fifo[_fifo_id].rear - Fifo[_fifo_id].front);
 }
 
 void fifo_clear(uint8_t _fifo_id) {
+	if (_fifo_id == FIFO_INIT_VALUE) return;
 	Fifo[_fifo_id].front = Fifo[_fifo_id].rear = 0;
 }
 
