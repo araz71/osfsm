@@ -16,6 +16,7 @@
 
 #define FSM_AVAL				10
 #define TIMER_AVAL				10
+#define TIMER_UNINIT_VALUE		0xFF
 
 #define FSM_AUTO_STEP
 #define FSM_BREAK				return

@@ -176,14 +176,14 @@ void fsm_signal(signal_enu signal) {
 }
 
 uint8_t fsm_make_timer(uint32_t delay, void (*callback)(void)) {
-	uint8_t timer_aval = 0xFF;
+	uint8_t timer_aval = TIMER_UNINIT_VALUE;
 	for (uint8_t i = 0; i < TIMER_AVAL; i++) {
 		if (timers[i].state == TIMER_STOP) {
 			timer_aval = i;
 			break;
 		}
 	}
-	if (timer_aval == 0xFF) return 0xFF;
+	if (timer_aval == TIMER_UNINIT_VALUE) return TIMER_UNINIT_VALUE;
 	timers[timer_aval].timestamp = get_timestamp();
 	timers[timer_aval].state = TIMER_RUN;
 	timers[timer_aval].callback = callback;
@@ -192,15 +192,15 @@ uint8_t fsm_make_timer(uint32_t delay, void (*callback)(void)) {
 }
 
 void fsm_timer_stop(uint8_t* timer) {
-	if ((*timer) != 0xFF) {
+	if ((*timer) != TIMER_UNINIT_VALUE) {
 		if ((*timer) < TIMER_AVAL)
 			timers[*timer].state = TIMER_STOP;
-		*timer = 0xFF;
+		*timer = TIMER_UNINIT_VALUE;
 	}
 }
 
 void fsm_timer_restart(uint8_t timer) {
-	if (timer != 0xFF && timer < TIMER_AVAL)
+	if (timer != TIMER_UNINIT_VALUE && timer < TIMER_AVAL)
 		timers[timer].timestamp = get_timestamp();
 }
 
