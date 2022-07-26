@@ -65,30 +65,6 @@ sfsm *make_fsm(void (*machine)(struct fsm_st* fsm))
 	return fsm;
 }
 
-void fsm_signal(signal_enu signal) {
-	sfsm *fsm = machines;
-	for (int i = 0; i < FSM_AVAL; i++) {
-		fsm = &machines[i];
-		if (fsm->signals & signal)
-			fsm->signal_flags |= signal;
-	}
-}
-
-uint8_t fsm_signal_ready(sfsm *fsm, signal_enu signal) {
-	if (fsm->signal_flags & signal) {
-		fsm->signal_flags &= ~signal;
-		return 1;
-	}
-	return 0;
-}
-
-void fsm_signal_register(sfsm *fsm, signal_enu signal) {
-	fsm->signals |= signal;
-}
-void fsm_signal_unregister(sfsm *fsm, signal_enu signal) {
-	fsm->signals &= ~signal;
-}
-
 void fsm_sleep(sfsm *fsm) {
 	fsm->status = FSM_SLEEP;
 }
@@ -160,7 +136,7 @@ void fsm_manager()
 			fsms->machine(fsms);
 
 		} else if (fsms->status == FSM_BLOCK_FOR_SIGNAL) {
-			if (fsms->signal_flags & fsms->block_template) {
+			if (fsms->signal_flags == 0) {
 				fsms->timestamp = get_timestamp();
 				fsms->status = FSM_RUN;
 			}
@@ -186,8 +162,17 @@ void fsm_manager()
 
 void fsm_wait_for_signal(sfsm *fsm, signal_enu signal, uint16_t step) {
 	fsm->status = FSM_BLOCK_FOR_SIGNAL;
-	fsm->block_template = signal;
+	fsm->signals |= signal;
 	fsm->step = step;
+}
+
+void fsm_signal(signal_enu signal) {
+	sfsm *fsm = machines;
+	for (int i = 0; i < FSM_AVAL; i++) {
+		fsm = &machines[i];
+		if (fsm->signals & signal)
+			fsm->signal_flags &= ~signal;
+	}
 }
 
 uint8_t fsm_make_timer(uint32_t delay, void (*callback)(void)) {

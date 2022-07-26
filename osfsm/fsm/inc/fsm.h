@@ -125,9 +125,6 @@ void fsm_wait(struct fsm_st *fsm, uint8_t (*wait_callback)(void), uint32_t delay
 void fsm_wait_jump(sfsm *fsm, uint8_t (*wait_callback)(void), uint32_t delay, uint16_t step);
 
 void fsm_signal(signal_enu signal);
-uint8_t fsm_signal_ready(sfsm *fsm, signal_enu signal);
-void fsm_signal_register(sfsm *fsm, signal_enu signal);
-void fsm_signal_unregister(sfsm *fsm, signal_enu signal);
 void fsm_wait_for_signal(sfsm *fsm, signal_enu signal, uint16_t step);
 
 void fsm_sleep(sfsm *fsm);
