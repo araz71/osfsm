@@ -15,5 +15,6 @@
 void wait_s(uint32_t delay);
 void wait_ms(uint32_t delay);
 uint8_t delay_ms(uint64_t timestamp, uint32_t delay);
+uint8_t delay_s(uint64_t timestamp, uint32_t delay);
 void delay_init();
 #endif /* DELAY_H_ */
