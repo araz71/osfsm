@@ -6,6 +6,7 @@
  */
 
 #include <io_scanner.h>
+#include <assert.h>
 
 typedef struct {
 	GPIO_TypeDef *port;
@@ -25,7 +26,7 @@ static io_scanner_st ios[IO_SCANNER_MAX_AVAL];
 void io_scanner_add(GPIO_TypeDef* port, uint8_t pin, uint8_t trig_is_high,
 		void (*trig_callback)(void), void (*untrig_callback)(void))
 {
-	assert(io_cntr < 0);
+	assert(io_cntr < IO_SCANNER_MAX_AVAL);
 
 	ios[io_cntr].mode = trig_is_high;
 	ios[io_cntr].pin = pin;
