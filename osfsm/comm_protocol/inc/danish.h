@@ -4,9 +4,12 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
+#include <delay.h>
 
 #define DANISH_MAX_DATA_SIZE		196
 #define DANISH_MAX_PACKET_SIZE		DANISH_MAX_DATA_SIZE + 7
+
+#define DANISH_STATS
 
 typedef enum {
 	PACKET_ADDRESS,
@@ -37,5 +40,13 @@ uint8_t danish_make(uint8_t address, function_enu function, uint16_t regID, uint
 int8_t danish_ach(uint8_t *packet, uint8_t len, danish_st *result);
 
 void danish_yiq(uint8_t c);
+
+/*
+ * return
+ * 	1 	: successfull
+ *	0 	: failed
+ *
+ */
+int danish_parser(danish_st *packet);
 
 #endif

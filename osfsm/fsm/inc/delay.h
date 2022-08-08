@@ -10,7 +10,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <def.h>
+
+#ifndef MY_DELAY
+uint64_t system_tick_cntr;
+#define get_timestamp()	system_tick_cntr
+#endif
 
 void wait_s(uint32_t delay);
 void wait_ms(uint32_t delay);

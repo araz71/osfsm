@@ -1,43 +1,83 @@
 #include "danish.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define Test_iter	2000
+
+#define mlog(...) {	printf("%d : ", __LINE__);	\
+	printf(__VA_ARGS__);	\ 
+	error = 1;}
 
 int main() {
-	//create a packet
-	uint8_t data[10];
-	uint8_t result[20];
+	uint8_t error = 0;
+	int failed_cntr = 0;
+	int succ_cntr = 0;
+	srand(time(NULL));
 
-	//must make successfull and return size of packet
-	uint8_t len = danish_make(10, FUNC_WRITE, 1203, 10, data, result);
-	if (len == 0) printf("%d : packet must create successfull but failed\r\n", __LINE__);
-	if (len < 16) printf("%d : packet size is wrong\r\n", __LINE__);
+	for (int i = 0; i < Test_iter; i++) {
+		error = 0;
 
-	//check for validity
-	if (result[PACKET_ADDRESS] != 10) printf("%d : packet make failed\r\n", __LINE__);
-	if (result[PACKET_FUNCTION] != FUNC_WRITE) printf("%d : packet make failed\r\n", __LINE__);
-	if (result[PACKET_REG_ID_MSB] != (1203 >> 8)) printf("%d : packet make failed\r\n", __LINE__);
-	if (result[PACKET_REG_ID_LSB] != (1203 & 0xFF)) printf("%d : packet make failed\r\n", __LINE__);
-	if (result[PACKET_LEN] != 10) printf("%d : packet make failed\r\n", __LINE__);
-	if (memcmp(&result[PACKET_DATA], data, 10) != 0) printf("packet make failed\r\n", __LINE__);
+		uint16_t data_size = rand() % DANISH_MAX_DATA_SIZE;
+		uint8_t *data = malloc(data_size);
+		
+		for (int byte_cntr = 0; byte_cntr < data_size; byte_cntr++) {
+			data[byte_cntr] = rand();
+		}
+		
+		function_enu func = rand() % 4;
+		uint8_t address = rand();
+		uint16_t reg = rand();
+		uint8_t *result = malloc(DANISH_MAX_PACKET_SIZE);
+		
+		uint16_t result_size = danish_make(address, func, reg, data_size, data, result);
 
-	//open packet with danish_ach
-	danish_st my_packet;
-	uint8_t my_data[20];
-	my_packet.data = my_data;
-	int8_t ret = danish_ach(result, len, &my_packet);
-	if (ret != 1) printf("%d : packet ach failed\r\n");
+		if (result_size == 0) mlog("Create Packet : Packet size is zero\r\n");
+		if (result_size < (data_size + 7)) mlog("Create Packet : Packet size error(must : %d - is : %d)\r\n", (data_size + 7), result_size);
+		if (result[PACKET_ADDRESS] != address) mlog("Create Packet : Address mismatch(must : %d - is : %d)\r\n", address, result[PACKET_ADDRESS]);
+		if (result[PACKET_FUNCTION] != func) mlog("Create Packet : Function mismatch(must : %d - is : %d)\r\n", func, result[PACKET_FUNCTION]);
+		if (result[PACKET_REG_ID_MSB] != (reg >> 8)) mlog("Create Packet : MSB of Register mismatch(must : %d - is : %d)\r\n", reg >> 8, result[PACKET_REG_ID_MSB]);
+		if (result[PACKET_REG_ID_LSB] != (reg & 0xff)) mlog("Create Packet : LSB of Register mismatch(must : %d - is : %d)\r\n", reg & 0xff, result[PACKET_REG_ID_LSB]);
+		if (result[PACKET_LEN] != data_size) mlog("Create Packet : Data size mismatch(must : %d - is : %d)\r\n", data_size, result[PACKET_LEN]);		
+		if (memcmp(&result[PACKET_DATA], data, data_size) != 0) mlog("Create Packet : Packet data mismatch\r\n");
 
-	if (my_packet.function != FUNC_WRITE) printf("%d : packet ach failed", __LINE__);
-	if (my_packet.len != 10) printf("%d : packet ach failed in data len(%d)\r\n", __LINE__, my_packet.len);
-	if (my_packet.address != 10) printf("%d : packet ach failed in address(%d)\r\n", __LINE__, my_packet.address);
-	if (my_packet.regID != 1203) printf("%d : packet ach failed in register id(%d)\r\n", __LINE__, my_packet.regID);
-	if (memcmp(my_packet.data, my_data, 10) != 0) printf("%d : packet ach failed in data\r\n", __LINE__);
+		//indi ach
+		danish_st params;
+		int fret = danish_ach(result, result_size, &params);
+		if (fret == 0) mlog("Packet incomplte!\r\n");
+		if (fret == -1) mlog("Packet Checksum error\r\n");
 
-	printf("Packet created and openned successfully :");
-	printf("\tpacket size : %d\r\n", len);
-	printf("\tpacket : ");
-	for (int i = 0; i < len; i++) {
-		printf("%02x ", result[i]);
+		if (params.address != address) mlog("Open packet : Address mismatch(must : %d - is : %d)\r\n", address, params.address);
+		if (params.function != func) mlog("Open packet : Function mismatch(must : %d - is : %d)\r\n", func, params.function);
+		if (params.regID != reg) mlog("Open packet : Register mismatch(must : %d - is : %d\r\n", reg, params.regID);
+		if (params.len != data_size) mlog("Open packet : Data-len mismatch(must : %d - is : %d\r\n", data_size, params.len);
+		if (memcmp(params.data, data, data_size) != 0) mlog("Open packet : Data mistmach\r\n");
+
+		//test of collect
+		for (int i = 0; i < result_size; i++)
+			danish_yiq(result[i]);
+
+		fret = danish_parse(&params);
+		if (fret) {
+		
+		} else {
+			mlog("Parse error!\r\n");
+		}
+
+		free(data);
+		free(result);
+
+		if (error) {
+			printf("Test %d Failed\r\n", i + 1);
+			failed_cntr++;
+		} else {
+			succ_cntr++;
+		}
 	}
-	printf("\r\n");
+
+	printf("Tests : %d\r\n", Test_iter);
+	printf("Failed : %d\r\nSuccessfull : %d\r\n", failed_cntr, succ_cntr);
 
 	return 1;
 }
