@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 
 project(osfsm LANGUAGES C)
+set(CMAKE_CXX_FLAGS "-g")
+set(CMAKE_C_FLAGS "-g")
 set(SOURCES src/main.c
 		fsm/src/fsm.c
 		fsm/src/delay.c

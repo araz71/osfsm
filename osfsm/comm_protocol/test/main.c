@@ -1,3 +1,4 @@
+#define DANISH_STATS
 #include "danish.h"
 #include <stdio.h>
 #include <string.h>
@@ -78,6 +79,11 @@ int main() {
 
 	printf("Tests : %d\r\n", Test_iter);
 	printf("Failed : %d\r\nSuccessfull : %d\r\n", failed_cntr, succ_cntr);
+
+	printf("Stats:\r\n");
+	printf("\tSuccessfull received : %d\r\n", danish_stats_get_successfull_received());
+	printf("\tChecksum error : %d\r\n", danish_stats_get_checksum_error());
+	printf("\tFull error : %d\r\n", danish_stats_get_full_error());
 
 	return 1;
 }

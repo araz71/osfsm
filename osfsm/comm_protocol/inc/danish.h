@@ -45,8 +45,13 @@ void danish_yiq(uint8_t c);
  * return
  * 	1 	: successfull
  *	0 	: failed
- *
  */
-int danish_parser(danish_st *packet);
+int danish_parse(danish_st *packet);
+
+#ifdef DANISH_STATS
+uint32_t danish_stats_get_successfull_received();
+uint32_t danish_stats_get_checksum_error();
+uint32_t danish_stats_get_full_error();
+#endif
 
 #endif

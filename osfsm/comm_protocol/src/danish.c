@@ -60,8 +60,7 @@ int8_t danish_ach(uint8_t *packet, uint8_t len, danish_st *result) {
 	result->address = packet[PACKET_ADDRESS];
 	result->regID = (packet[PACKET_REG_ID_MSB] << 8) + (packet[PACKET_REG_ID_LSB]);
 	result->len = packet[PACKET_LEN];
-	memcpy(result->data, &packet[PACKET_DATA], result->len);
-	
+	result->data = &packet[PACKET_DATA];
 	return 1;
 #endif
 }
@@ -105,3 +104,17 @@ int danish_parse(danish_st *packet) {
 	}
 	return 0;
 }
+
+#ifdef DANISH_STATS
+uint32_t danish_stats_get_successfull_received() {
+	return danish_stats_rcv;
+}
+
+uint32_t danish_stats_get_checksum_error() {
+	return danish_stats_checksum_err;
+}
+
+uint32_t danish_stats_get_full_error() {
+	return danish_stats_full_err;
+}
+#endif
