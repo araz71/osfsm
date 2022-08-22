@@ -1,1 +1,0 @@
-/usr/bin/cc -g  -rdynamic CMakeFiles/LINK.dir/main.c.o CMakeFiles/LINK.dir/__/__/src/danish.c.o CMakeFiles/LINK.dir/__/__/src/danish_link.c.o CMakeFiles/LINK.dir/__/__/__/fsm/src/delay.c.o  -o LINK 
