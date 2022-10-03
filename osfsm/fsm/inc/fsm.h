@@ -11,11 +11,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <fsm_def.h>
 #include <delay.h>
 
-#define FSM_AVAL				12
-#define TIMER_AVAL				10
+#ifndef FSM_AVAL
+#error "Please set how many fsm do you have with defining FSM_AVAL"
+#endif
+
+#ifndef TIMER_AVAL
+#error "Please set how many timer do you have with defining TIMER_AVAL"
+#endif
+
 #define TIMER_UNINIT_VALUE		0xFF
 
 #define FSM_AUTO_STEP
