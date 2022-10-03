@@ -6,6 +6,8 @@
  */
 #include <delay.h>
 
+extern uint64_t get_timestamp();
+
 uint8_t delay_ms(uint64_t timestamp, uint32_t delay)
 {
 	if ((get_timestamp() - timestamp) >= delay)

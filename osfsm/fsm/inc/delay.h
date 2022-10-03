@@ -13,7 +13,6 @@
 
 #ifndef MY_DELAY
 uint64_t system_tick_cntr;
-#define get_timestamp()	system_tick_cntr
 #endif
 
 void wait_s(uint32_t delay);

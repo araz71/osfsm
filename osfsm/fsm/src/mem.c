@@ -1,5 +1,6 @@
 #include <mem.h>
 
+#ifdef MY_MEM_ALLOC
 static uint8_t buffer[BUFFER_SIZE];
 
 struct buffer_pages_st{
@@ -57,3 +58,4 @@ void mem_print() {
         }
     }
 }
+#endif

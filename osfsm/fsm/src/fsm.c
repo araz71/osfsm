@@ -136,7 +136,7 @@ void fsm_manager()
 			fsms->machine(fsms);
 
 		} else if (fsms->status == FSM_BLOCK_FOR_SIGNAL) {
-			if (fsms->signal_flags == 0) {
+			if (fsms->signals == 0) {
 				fsms->timestamp = get_timestamp();
 				fsms->status = FSM_RUN;
 			}
@@ -167,11 +167,11 @@ void fsm_wait_for_signal(sfsm *fsm, signal_enu signal, uint16_t step) {
 }
 
 void fsm_signal(signal_enu signal) {
-	sfsm *fsm = machines;
+	sfsm *fsm;
 	for (int i = 0; i < FSM_AVAL; i++) {
 		fsm = &machines[i];
 		if (fsm->signals & signal)
-			fsm->signal_flags &= ~signal;
+			fsm->signals &= ~signal;
 	}
 }
 

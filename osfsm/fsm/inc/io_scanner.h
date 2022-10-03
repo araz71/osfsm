@@ -11,7 +11,7 @@
 #include <def.h>
 #include <delay.h>
 
-#define IO_SCANNER_MAX_AVAL		5
+#define IO_SCANNER_MAX_AVAL		2
 
 void io_scanner_add(GPIO_TypeDef* port, uint8_t pin, uint8_t trig_is_high,
 		void (*trig_callback)(void), void (*untrig_callback)(void));

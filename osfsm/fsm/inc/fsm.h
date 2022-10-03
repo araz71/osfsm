@@ -14,7 +14,7 @@
 
 #include <delay.h>
 
-#define FSM_AVAL				10
+#define FSM_AVAL				12
 #define TIMER_AVAL				10
 #define TIMER_UNINIT_VALUE		0xFF
 
@@ -88,7 +88,6 @@ struct fsm_st
 	uint32_t delay;
 
 	uint8_t signals;
-	uint8_t signal_flags;
 
 	uint16_t mutex;
 
