@@ -6,7 +6,13 @@
  */
 #include <delay.h>
 
+#ifdef MY_DELAY
 extern uint64_t get_timestamp();
+#else
+uint64_t get_timestamp() {
+	return system_tick_cntr;
+}
+#endif
 
 uint8_t delay_ms(uint64_t timestamp, uint32_t delay)
 {

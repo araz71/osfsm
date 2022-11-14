@@ -52,12 +52,13 @@ void io_scanner() {
 			{
 				ios[i].state = 0;
 			}
+
 			if (delay_ms(ios[i].ts, 50)) {
-				if (ios[i].trig_callback != NULL) {
-					ios[i].trig_callback();
-				}
+				if (ios[i].trig_callback != NULL) ios[i].trig_callback();
+
 				ios[i].state = 2;
 			}
+
 		} else if (ios[i].state == 2) {
 			if ((ios[i].mode && !PIN_STATE(ios[i].port, ios[i].pin)) ||
 					(!ios[i].mode && PIN_STATE(ios[i].port, ios[i].pin)))
@@ -65,13 +66,15 @@ void io_scanner() {
 				ios[i].ts = get_timestamp();
 				ios[i].state = 3;
 			}
+
 		} else if (ios[i].state == 3) {
 			if (delay_ms(ios[i].ts, 50)) {
-				if (ios[i].untrig_callback != NULL) {
+				if (ios[i].untrig_callback != NULL)
 					ios[i].untrig_callback();
-				}
+
 				ios[i].state = 0;
 			}
+
 			if ((ios[i].mode && PIN_STATE(ios[i].port, ios[i].pin)) ||
 					(!ios[i].mode && !PIN_STATE(ios[i].port, ios[i].pin)))
 			{

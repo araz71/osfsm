@@ -53,7 +53,7 @@ sfsm *make_fsm(void (*machine)(struct fsm_st* fsm))
 		}
 	}
 	if (fsm == NULL) {
-		printf("No space avaliable to mke fsm\r\n");
+//		printf("No space avaliable to mke fsm\r\n");
 		assert(0);
 	}
 
