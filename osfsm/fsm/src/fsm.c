@@ -96,8 +96,8 @@ void fsm_wait(sfsm *fsm, uint8_t (*wait_callback)(void), uint32_t delay)
 	fsm->timestamp = get_timestamp();
 }
 
-uint8_t fsm_check_delay(sfsm *fsm, uint32_t delay) {
-	return (delay_ms(fsm->timestamp, delay));
+uint8_t fsm_check_delay(sfsm *fsm, uint32_t ms) {
+	return (delay_ms(fsm->timestamp, ms));
 }
 
 void fsm_make_time_point(sfsm *fsm) {

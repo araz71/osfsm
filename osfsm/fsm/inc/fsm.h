@@ -135,7 +135,7 @@ void fsm_wait_for_signal(sfsm *fsm, signal_enu signal, uint16_t step);
 
 void fsm_sleep(sfsm *fsm);
 
-uint8_t fsm_check_delay(struct fsm_st *fsm, uint32_t delay);
+uint8_t fsm_check_delay(struct fsm_st *fsm, uint32_t ms);
 void fsm_make_time_point(struct fsm_st *fsm);
 
 void fsm_manager();
