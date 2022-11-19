@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <danish.h>
+#include <log.h>
 
 #define DANISH_LINK_MAX_REGISTERS	10
 
@@ -39,5 +40,9 @@ int8_t danish_add_register(link_reg_st *reg);
 
 int8_t danish_write(uint8_t addr, uint16_t regID, uint8_t *data);
 int8_t danish_read(uint8_t addr, uint16_t regID);
+
+void danish_link_init(uint8_t address, void(*write_interface)(uint8_t* data, uint16_t len));
+
+void danish_machine();
 
 #endif

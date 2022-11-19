@@ -7,6 +7,5 @@ include_directories("${CMAKE_CURRENT_SRC_DIR}test")
 include_directories("../fsm/inc")
 
 add_subdirectory("test/link")
-add_subdirectory("test/packet")
 	
 

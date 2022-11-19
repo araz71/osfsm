@@ -2,6 +2,7 @@
 
 static uint8_t number_of_registered_ids = 0;
 static void (*danish_writer)(uint8_t *data, uint8_t size);
+static uint8_t danish_address;
 
 static uint8_t tx_buffer[DANISH_MAX_PACKET_SIZE];
 static uint16_t tx_len;
@@ -59,8 +60,9 @@ int8_t danish_read(uint8_t addr, uint16_t regID) {
 	return 1;
 }
 
-void danish_link_init(void (*write_interface)(uint8_t *data, uint16_t len)) {
+void danish_link_init(uint8_t address, void (*write_interface)(uint8_t *data, uint16_t len)) {
 	danish_writer = write_interface;
+	danish_address = address;
 }
 
 void danish_machine() {
@@ -71,10 +73,11 @@ void danish_machine() {
 	int8_t fret = danish_parse(&rcv_packet);
 	if (fret == 1) {
 		for (int i = 0; i < number_of_registered_ids; i++) {
-			if (rcv_packet.address == 1) {	//FIXME : 1 is my own address on bus
-				printf("Packet from %d : func(%s) - reg(%d)\r\n",
+			if (rcv_packet.address == danish_address) {	//FIXME : 1 is my own address on bus
+				mlog("Packet from %d : func(%s) - reg(%d)\r\n",
 					rcv_packet.address, 
-					rcv_packet.function == FUNC_WRITE ? "wr" : "r/ack",
+					rcv_packet.function == FUNC_WRITE ? "wr" : 
+						(rcv_packet.function == FUNC_WRITE_ACK ? "w-ack" : "r"),
 					rcv_packet.regID);
 
 				// Incomming packet request to write.
@@ -87,14 +90,14 @@ void danish_machine() {
 					// Make Write ack. so writer will sure about writing.
 					uint8_t write_ack_packet[20];
 					uint16_t size = danish_make(rcv_packet.address, FUNC_WRITE_ACK, rcv_packet.regID, 0, NULL, write_ack_packet);
-					danish_link_write_interface(write_ack_packet, size);	
+					danish_writer(write_ack_packet, size);	
 
 				} else if (rcv_packet.function == FUNC_WRITE_ACK) {
 					registers[i].write_ack_callback();
 
 				// Read request will answer by FUNC_WRITE
 				} else if (rcv_packet.function == FUNC_READ) {
-					danish_req_reg_write(rcv_packet.address, rcv_packet.regID, registers[i].ptr);
+					danish_write(rcv_packet.address, rcv_packet.regID, registers[i].ptr);
 					if (registers[i].read_callback != NULL) {
 						registers[i].read_callback(rcv_packet.address);
 					}
@@ -119,7 +122,7 @@ void danish_machine() {
 				mlog("Read request from %d with reg %d\r\n", 
 						registers[i].rwaddr, registers[i].regID);
 				tx_len = danish_make(registers[i].rwaddr, FUNC_READ, registers[i].regID,
-						0, NULL, tx_buffer);
+						registers[i].size, registers[i].ptr, tx_buffer);
 				read = 1;
 				registers[i].flags &= ~DANISH_LINK_FLAGS_READ;
 				request_busy = 1;
