@@ -1,7 +1,7 @@
 #include <danish_link.h>
 
 static uint8_t number_of_registered_ids = 0;
-static void (*danish_writer)(uint8_t *data, uint8_t size);
+static void (*danish_writer)(uint8_t *data, uint16_t size);
 static uint8_t danish_address;
 
 static uint8_t tx_buffer[DANISH_MAX_PACKET_SIZE];
