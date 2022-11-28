@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <log.h>
 
 typedef uint8_t shm_id;
 
