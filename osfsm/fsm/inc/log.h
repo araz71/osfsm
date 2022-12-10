@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+//#define DEBUG
+
 #ifdef DEBUG
 #define mlog(...)	printf("%-30s (%04d) : ", __func__ , __LINE__);	\
 			printf(__VA_ARGS__);	\

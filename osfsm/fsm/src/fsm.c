@@ -6,6 +6,7 @@
  */
 
 #include <fsm.h>
+#include <log.h>
 #include <assert.h>
 
 static sfsm machines[FSM_AVAL];
@@ -13,11 +14,15 @@ static stimer timers[TIMER_AVAL];
 static uint16_t fsm_mutex = 0;
 
 void mutex_lock(fsm_mutex_enu mutex) {
+	mlog("Mutex %d locked", mutex);
 	fsm_mutex |= mutex;
 }
+
 void mutex_unlock(fsm_mutex_enu mutex) {
+	mlog("Mutex %d unlocked", mutex);
 	fsm_mutex &= ~mutex;
 }
+
 uint8_t mutex_busy(fsm_mutex_enu mutex) {
 	if (fsm_mutex & mutex) return 1;
 	return 0;
@@ -30,16 +35,28 @@ uint8_t fsm_mutex_check(fsm_mutex_enu mutex) {
 
 void fsm_mutex_lock(sfsm* fsm, fsm_mutex_enu mutex) {
 	if (fsm_mutex & mutex) {
+		mlog("FSM[%s] waits for mutex[%d]", fsm->machine_name, mutex);
 		fsm->status = FSM_WAIT_FOR_MUTEX;
 		fsm->mutex |= mutex;
 	} else {
+		mlog("Mutex[%d] locked for FSM[%s]", mutex, fsm->machine_name);
 		fsm_mutex |= mutex;
 	}
 }
 
 void fsm_mutex_unlock(sfsm* fsm, fsm_mutex_enu mutex) {
+	mlog("Mutex[%d] unlocked by FSM[%s]", mutex, fsm->machine_name);
 	fsm_mutex &= ~mutex;
 	fsm->mutex &= ~mutex;
+}
+
+sfsm* make_fsm_with_name(void (*machine)(sfsm* fsm), const char* name) {
+	sfsm* this_fsm = make_fsm(machine);
+	this_fsm->machine_name = (char*)name;
+
+	mlog("Machine[%s] added", name);
+
+	return this_fsm;
 }
 
 sfsm *make_fsm(void (*machine)(struct fsm_st* fsm))
@@ -61,6 +78,7 @@ sfsm *make_fsm(void (*machine)(struct fsm_st* fsm))
 
 	fsm->machine = machine;
 	fsm->status = FSM_RUN;
+	fsm->machine_name = (char *)__FUNCTION__;
 
 	return fsm;
 }
@@ -164,14 +182,18 @@ void fsm_wait_for_signal(sfsm *fsm, signal_enu signal, uint16_t step) {
 	fsm->status = FSM_BLOCK_FOR_SIGNAL;
 	fsm->signals |= signal;
 	fsm->step = step;
+
+	mlog("FSM[%s] sleeped for signal[%d]", fsm->machine_name, signal);
 }
 
 void fsm_signal(signal_enu signal) {
 	sfsm *fsm;
 	for (int i = 0; i < FSM_AVAL; i++) {
 		fsm = &machines[i];
-		if (fsm->signals & signal)
+		if (fsm->signals & signal) {
 			fsm->signals &= ~signal;
+			mlog("Send signal[%d] to FSM[%s]", signal, fsm->machine_name);
+		}
 	}
 }
 

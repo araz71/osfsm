@@ -100,6 +100,8 @@ struct fsm_st
 	uint8_t block_template;
 
 	uint8_t (*flag_callback)(void);
+
+	char *machine_name;
 };
 
 typedef struct {
@@ -122,6 +124,7 @@ void mutex_unlock(fsm_mutex_enu mutex);
 uint8_t mutex_busy(fsm_mutex_enu mutex);
 
 struct fsm_st *make_fsm(void (*machine)(struct fsm_st* fsm));
+sfsm *make_fsm_with_name(void (*machine)(sfsm* fsm), const char *name);
 void fsm_stop(struct fsm_st* fsm);
 
 void fsm_delay(struct fsm_st *fsm, uint32_t delay);
