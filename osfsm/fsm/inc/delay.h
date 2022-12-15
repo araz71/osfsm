@@ -2,7 +2,7 @@
  * delay.h
  *
  *  Created on: Apr 22, 2022
- *      Author: Zeinab
+ *      Author: Amin Aghakhani
  */
 #ifndef DELAY_H_
 #define DELAY_H_
@@ -20,4 +20,11 @@ void wait_ms(uint32_t delay);
 uint8_t delay_ms(uint64_t timestamp, uint32_t delay);
 uint8_t delay_s(uint64_t timestamp, uint32_t delay);
 void delay_init();
+
+#ifdef MY_DELAY
+extern uint64_t get_timestamp();
+#else
+uint64_t get_timestamp();
+#endif
+
 #endif /* DELAY_H_ */

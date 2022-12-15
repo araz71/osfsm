@@ -2,13 +2,12 @@
  * delay.c
  *
  *  Created on: Apr 22, 2022
- *      Author: Zeinab
+ *      Author: Amin Aghakhani
  */
 #include <delay.h>
 
-#ifdef MY_DELAY
-extern uint64_t get_timestamp();
-#else
+
+#ifndef MY_DELAY
 uint64_t get_timestamp() {
 	return system_tick_cntr;
 }

@@ -2,7 +2,7 @@
  * fsm.c
  *
  *  Created on: Apr 22, 2022
- *      Author: Zeinab
+ *      Author: Amin Aghakhani
  */
 
 #include <fsm.h>
