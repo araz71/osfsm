@@ -8,6 +8,7 @@
 
 
 #ifndef MY_DELAY
+uint64_t system_tick_cntr = 0;
 uint64_t get_timestamp() {
 	return system_tick_cntr;
 }
