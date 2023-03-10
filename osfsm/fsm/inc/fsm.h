@@ -105,10 +105,11 @@ struct fsm_st
 };
 
 typedef struct {
-	void (*callback)(void);
+	void (*callback)(uint32_t arg);
 
 	uint32_t delay;
 	uint64_t timestamp;
+	uint32_t arg;
 	timer_state_enu state;
 } stimer;
 #pragma pack(pop)
@@ -144,7 +145,7 @@ void fsm_make_time_point(struct fsm_st *fsm);
 void fsm_manager();
 void fsm_init();
 
-uint8_t fsm_make_timer(uint32_t delay, void (*callback)(void));
+uint8_t fsm_make_timer(uint32_t delay, void (*callback)(uint32_t arg), uint32_t arg);
 void fsm_timer_stop(uint8_t* timer);
 void fsm_timer_restart(uint8_t timer);
 

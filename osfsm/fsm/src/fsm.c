@@ -172,7 +172,7 @@ void fsm_manager()
 		if (timers[i].state == TIMER_RUN) {
 			if (delay_ms(timers[i].timestamp, timers[i].delay)) {
 				timers[i].state = TIMER_STOP;
-				timers[i].callback();
+				timers[i].callback(timers[i].arg);
 			}
 		}
 	}
@@ -197,7 +197,7 @@ void fsm_signal(signal_enu signal) {
 	}
 }
 
-uint8_t fsm_make_timer(uint32_t delay, void (*callback)(void)) {
+uint8_t fsm_make_timer(uint32_t delay, void (*callback)(uint32_t arg), uint32_t arg) {
 	uint8_t timer_aval = TIMER_UNINIT_VALUE;
 	for (uint8_t i = 0; i < TIMER_AVAL; i++) {
 		if (timers[i].state == TIMER_STOP) {
@@ -211,6 +211,7 @@ uint8_t fsm_make_timer(uint32_t delay, void (*callback)(void)) {
 	timers[timer_aval].state = TIMER_RUN;
 	timers[timer_aval].callback = callback;
 	timers[timer_aval].delay = delay;
+	timers[timer_aval].arg = arg;
 	return timer_aval;
 }
 
