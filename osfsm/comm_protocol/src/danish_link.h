@@ -34,8 +34,6 @@ typedef struct  {
 	void (*write_ack_callback)();			// Will call when destination returns write callback
 } link_reg_st;
 
-link_reg_st registers[DANISH_LINK_MAX_REGISTERS];
-
 int8_t danish_add_register(link_reg_st *reg);
 
 int8_t danish_write(uint8_t addr, uint16_t regID, uint8_t *data);

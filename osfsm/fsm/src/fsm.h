@@ -30,10 +30,12 @@
 #define FSM_NEXT_STEP			fsm->step + 1
 #define FSM_GO_NEXT			fsm->step++
 
+#ifdef FSM_SUPPORT_SIGNAL
 #define SIGNAL_READY(SIGNAL)		fsm_signal_ready(fsm, SIGNAL)
 #define SIGNAL_REG(SIGNAL)		fsm_signal_register(fsm, SIGNAL)
 #define SIGNAL_UNREG(SIGNAL)		fsm_signal_unregister(fsm, SIGNAL)
 #define SIGNAL_CLEAR(SIGNAL)		fsm->signal_flags &= ~SIGNAL
+#endif
 
 typedef enum
 {
@@ -46,6 +48,7 @@ typedef enum
 	FSM_SLEEP,
 } fsm_status_enu;
 
+#ifdef FSM_SUPPORT_SIGNAL
 typedef enum {
 	SIGNAL_EXIT		= 0x01,
 	SIGNAL_SLEEP		= 0x02,
@@ -55,7 +58,9 @@ typedef enum {
 	SIGNAL_USR_4		= 0x20,
 	SIGNAL_USR_5		= 0x40,
 } signal_enu;
+#endif
 
+#ifdef FSM_SUPPORT_MUTEX
 typedef enum {
 	FSM_MUTEX_1		= 0x0001,
 	FSM_MUTEX_2		= 0x0002,
@@ -74,6 +79,7 @@ typedef enum {
 	FSM_MUTEX_15		= 0x4000,
 	FSM_MUTEX_16		= 0x8000,
 } fsm_mutex_enu;
+#endif
 
 typedef enum {
 	TIMER_STOP,
@@ -93,9 +99,13 @@ struct fsm_st
 	uint64_t timestamp;
 	uint32_t delay;
 
+#ifdef FSM_SUPPORT_SIGNAL
 	uint8_t signals;
+#endif
 
+#ifdef FSM_SUPPORT_MUTEX
 	uint16_t mutex;
+#endif
 
 	uint8_t block_template;
 
@@ -116,6 +126,7 @@ typedef struct {
 
 typedef struct fsm_st sfsm;
 
+#ifdef FSM_SUPPORT_MUTEX
 void fsm_mutex_lock(sfsm* fsm, fsm_mutex_enu mutex);
 void fsm_mutex_unlock(sfsm* fsm, fsm_mutex_enu mutex);
 uint8_t fsm_mutex_check(fsm_mutex_enu mutex);
@@ -123,6 +134,7 @@ uint8_t fsm_mutex_check(fsm_mutex_enu mutex);
 void mutex_lock(fsm_mutex_enu mutex);
 void mutex_unlock(fsm_mutex_enu mutex);
 uint8_t mutex_busy(fsm_mutex_enu mutex);
+#endif
 
 struct fsm_st *make_fsm(void (*machine)(struct fsm_st* fsm));
 sfsm *make_fsm_with_name(void (*machine)(sfsm* fsm), const char *name);
@@ -134,8 +146,10 @@ void fsm_delay_jump(sfsm *fsm, uint32_t delay, uint16_t step);
 void fsm_wait(struct fsm_st *fsm, uint8_t (*wait_callback)(void), uint32_t delay);
 void fsm_wait_jump(sfsm *fsm, uint8_t (*wait_callback)(void), uint32_t delay, uint16_t step);
 
+#ifdef FSM_SUPPORT_SIGNAL
 void fsm_signal(signal_enu signal);
 void fsm_wait_for_signal(sfsm *fsm, signal_enu signal, uint16_t step);
+#endif
 
 void fsm_sleep(sfsm *fsm);
 

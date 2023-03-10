@@ -5,12 +5,14 @@
  *      Author: Amin Aghakhani
  */
 
-#include <fsm.h>
+#include "fsm.h"
 #include <log.h>
 #include <assert.h>
 
 static sfsm machines[FSM_AVAL];
 static stimer timers[TIMER_AVAL];
+
+#ifdef FSM_SUPPORT_MUTEX
 static uint16_t fsm_mutex = 0;
 
 void mutex_lock(fsm_mutex_enu mutex) {
@@ -49,6 +51,7 @@ void fsm_mutex_unlock(sfsm* fsm, fsm_mutex_enu mutex) {
 	fsm_mutex &= ~mutex;
 	fsm->mutex &= ~mutex;
 }
+#endif
 
 sfsm* make_fsm_with_name(void (*machine)(sfsm* fsm), const char* name) {
 	sfsm* this_fsm = make_fsm(machine);
@@ -152,20 +155,25 @@ void fsm_manager()
 
 		} else if (fsms->status == FSM_RUN) {
 			fsms->machine(fsms);
-
-		} else if (fsms->status == FSM_BLOCK_FOR_SIGNAL) {
+		}
+#ifdef FSM_SUPPORT_SIGNAL
+		else if (fsms->status == FSM_BLOCK_FOR_SIGNAL) {
 			if (fsms->signals == 0) {
 				fsms->timestamp = get_timestamp();
 				fsms->status = FSM_RUN;
 			}
+		}
+#endif
 
-		} else if (fsms->status == FSM_WAIT_FOR_MUTEX) {
+#ifdef FSM_SUPPORT_MUTEX
+		else if (fsms->status == FSM_WAIT_FOR_MUTEX) {
 			if ((fsms->mutex & fsm_mutex) == 0) {
 				fsms->status = FSM_RUN;
 				fsm_mutex |= fsms->mutex;
 				fsms->mutex = 0;
 			}
 		}
+#endif
 	}
 
 	for (int i = 0; i < TIMER_AVAL; i++) {
@@ -178,6 +186,7 @@ void fsm_manager()
 	}
 }
 
+#ifdef FSM_SUPPORT_SIGNAL
 void fsm_wait_for_signal(sfsm *fsm, signal_enu signal, uint16_t step) {
 	fsm->status = FSM_BLOCK_FOR_SIGNAL;
 	fsm->signals |= signal;
@@ -196,6 +205,7 @@ void fsm_signal(signal_enu signal) {
 		}
 	}
 }
+#endif
 
 uint8_t fsm_make_timer(uint32_t delay, void (*callback)(uint32_t arg), uint32_t arg) {
 	uint8_t timer_aval = TIMER_UNINIT_VALUE;
