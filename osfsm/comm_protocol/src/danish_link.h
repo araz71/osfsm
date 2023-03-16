@@ -4,19 +4,22 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <danish_conf.h>
 #include <danish.h>
 #include <log.h>
 
-#define DANISH_LINK_MAX_REGISTERS	10
+#ifndef DANISH_LINK_MAX_REGISTERS
+#error "Please define DANISH_LINK_MAX_REGISTERS to show how many registers you have"
+#endif
+
+#ifndef DANISH_LINK_MAX_REGISTERS
+#error "please define maximum registers avaliable(DANISH_LINK_MAX_REGISTERS)"
+#endif
 
 typedef enum {
 	DANISH_LINK_FLAGS_WRITE = 0x01,
 	DANISH_LINK_FLAGS_READ 	= 0x02,
 } danish_link_flags_enu;
-
-#ifndef DANISH_LINK_MAX_REGISTERS
-#error "please define maximum registers avaliable(DANISH_LINK_MAX_REGISTERS)"
-#endif
 
 typedef void (*filled_callback_ptr)(uint8_t);
 typedef void (*read_callback_ptr)(uint8_t);

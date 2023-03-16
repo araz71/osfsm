@@ -1,6 +1,6 @@
 #include <danish_link.h>
 
-static link_reg_st registers[DANISH_LINK_MAX_REGISTERS];
+link_reg_st __attribute__((weak)) registers[DANISH_LINK_MAX_REGISTERS];
 static uint8_t number_of_registered_ids = 0;
 static void (*danish_writer)(uint8_t *data, uint8_t size);
 static uint8_t danish_address;

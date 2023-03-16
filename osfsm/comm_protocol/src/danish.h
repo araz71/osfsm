@@ -5,11 +5,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <delay.h>
+#include <danish_conf.h>
 
-#define DANISH_MAX_DATA_SIZE		196
+#ifndef DANISH_MAX_DATA_SIZE
+#error "Please define DANISH_MAX_DATA_SIZE"
+#endif
+
 #define DANISH_MAX_PACKET_SIZE		DANISH_MAX_DATA_SIZE + 7
-
-#define DANISH_STATS
 
 typedef enum {
 	PACKET_ADDRESS,

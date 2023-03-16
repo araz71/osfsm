@@ -50,7 +50,7 @@ typedef enum
 
 #ifdef FSM_SUPPORT_SIGNAL
 typedef enum {
-	SIGNAL_EXIT		= 0x01,
+	SIGNAL_EXIT			= 0x01,
 	SIGNAL_SLEEP		= 0x02,
 	SIGNAL_USR_1		= 0x04,
 	SIGNAL_USR_2		= 0x08,
