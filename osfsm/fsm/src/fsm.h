@@ -25,28 +25,18 @@
 #define TIMER_UNINIT_VALUE		0xFF
 
 #define FSM_AUTO_STEP
-#define FSM_BREAK			return
+#define FSM_BREAK				return
 #define FSM_CURRENT_STEP		fsm->step
 #define FSM_NEXT_STEP			fsm->step + 1
-#define FSM_GO_NEXT			fsm->step++
+#define FSM_GO_NEXT				fsm->step++
+#define FSM_LAST_STEP			fsm->step - 1
 
 #ifdef FSM_SUPPORT_SIGNAL
 #define SIGNAL_READY(SIGNAL)		fsm_signal_ready(fsm, SIGNAL)
-#define SIGNAL_REG(SIGNAL)		fsm_signal_register(fsm, SIGNAL)
+#define SIGNAL_REG(SIGNAL)			fsm_signal_register(fsm, SIGNAL)
 #define SIGNAL_UNREG(SIGNAL)		fsm_signal_unregister(fsm, SIGNAL)
 #define SIGNAL_CLEAR(SIGNAL)		fsm->signal_flags &= ~SIGNAL
 #endif
-
-typedef enum
-{
-	FSM_STOP,
-	FSM_RUN,
-	FSM_DELAY,
-	FSM_WAIT,
-	FSM_WAIT_FOR_MUTEX,
-	FSM_BLOCK_FOR_SIGNAL,
-	FSM_SLEEP,
-} fsm_status_enu;
 
 #ifdef FSM_SUPPORT_SIGNAL
 typedef enum {
@@ -81,6 +71,17 @@ typedef enum {
 } fsm_mutex_enu;
 #endif
 
+typedef enum
+{
+	FSM_STOP,
+	FSM_RUN,
+	FSM_DELAY,
+	FSM_WAIT,
+	FSM_WAIT_FOR_MUTEX,
+	FSM_BLOCK_FOR_SIGNAL,
+	FSM_SLEEP,
+} fsm_status_enu;
+
 typedef enum {
 	TIMER_STOP,
 	TIMER_RUN,
@@ -111,7 +112,9 @@ struct fsm_st
 
 	uint8_t (*flag_callback)(void);
 
+#ifdef DEBUG
 	char *machine_name;
+#endif
 };
 
 typedef struct {

@@ -2,7 +2,7 @@
 
 link_reg_st __attribute__((weak)) registers[DANISH_LINK_MAX_REGISTERS];
 static uint8_t number_of_registered_ids = 0;
-static void (*danish_writer)(uint8_t *data, uint8_t size);
+static void (*danish_writer)(uint8_t *data, uint16_t size);
 static uint8_t danish_address;
 
 static uint8_t tx_buffer[DANISH_MAX_PACKET_SIZE];
@@ -74,7 +74,7 @@ void danish_machine() {
 	int8_t fret = danish_parse(&rcv_packet);
 	if (fret == 1) {
 		for (int i = 0; i < number_of_registered_ids; i++) {
-			if (rcv_packet.address == danish_address) {	//FIXME : 1 is my own address on bus
+			if (rcv_packet.address == danish_address) {
 				mlog("Packet from %d : func(%s) - reg(%d)\r\n",
 					rcv_packet.address, 
 					rcv_packet.function == FUNC_WRITE ? "wr" : 

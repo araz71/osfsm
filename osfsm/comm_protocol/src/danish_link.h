@@ -33,7 +33,7 @@ typedef struct  {
 	uint8_t rwaddr;		// Address of module which we want to read/write
 
 	void (*filled_callback)(uint8_t writer);	// Will call when buffer is filled by writer
-	void (*read_callback)(uint8_t reader);		// Will call when a reader read buffer
+	uint8_t* (*read_callback)(uint8_t reader);		// Will call when a reader read buffer
 	void (*write_ack_callback)();			// Will call when destination returns write callback
 } link_reg_st;
 

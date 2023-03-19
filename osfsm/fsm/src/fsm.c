@@ -55,7 +55,9 @@ void fsm_mutex_unlock(sfsm* fsm, fsm_mutex_enu mutex) {
 
 sfsm* make_fsm_with_name(void (*machine)(sfsm* fsm), const char* name) {
 	sfsm* this_fsm = make_fsm(machine);
+#ifdef DEBUG
 	this_fsm->machine_name = (char*)name;
+#endif
 
 	mlog("Machine[%s] added", name);
 
@@ -81,7 +83,10 @@ sfsm *make_fsm(void (*machine)(struct fsm_st* fsm))
 
 	fsm->machine = machine;
 	fsm->status = FSM_RUN;
+
+#ifdef DEBUG
 	fsm->machine_name = (char *)__FUNCTION__;
+#endif
 
 	return fsm;
 }
@@ -229,6 +234,7 @@ void fsm_timer_stop(uint8_t* timer) {
 	if ((*timer) != TIMER_UNINIT_VALUE) {
 		if ((*timer) < TIMER_AVAL)
 			timers[*timer].state = TIMER_STOP;
+
 		*timer = TIMER_UNINIT_VALUE;
 	}
 }

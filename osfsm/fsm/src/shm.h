@@ -18,6 +18,6 @@ typedef struct {
 
 uint8_t shm_lock(shm_id id, char* pid);
 uint8_t shm_unlock(shm_id id, char* pid);
-shm_id shm_add(uint8_t* pointer2buf);
+shm_id shm_add(void* pointer2buf);
 uint8_t* shm_get(shm_id id);
 #endif

@@ -38,7 +38,6 @@ typedef struct {
 } danish_st;
 
 uint8_t danish_make(uint8_t address, function_enu function, uint16_t regID, uint8_t len, uint8_t *data, uint8_t *packet);
-
 int8_t danish_ach(uint8_t *packet, uint8_t len, danish_st *result);
 
 void danish_yiq(uint8_t c);

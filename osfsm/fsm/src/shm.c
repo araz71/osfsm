@@ -23,7 +23,7 @@ uint8_t shm_unlock(shm_id id, char* pid) {
 	return 0;
 }
 
-shm_id shm_add(uint8_t *pointer2buf) {
+shm_id shm_add(void* pointer2buf) {
 	if (shm_counter >= SHM_MAX) return 0xFF;
 	shms[shm_counter].ptr = pointer2buf;
 	shm_counter++;
