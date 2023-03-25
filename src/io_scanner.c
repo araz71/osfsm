@@ -8,6 +8,8 @@
 #include <io_scanner.h>
 #include <assert.h>
 
+#ifdef IO_SCANNER_MAX_AVAL
+
 typedef struct {
 	GPIO_TypeDef *port;
 	uint8_t pin;
@@ -83,3 +85,5 @@ void io_scanner() {
 		}
 	}
 }
+
+#endif
