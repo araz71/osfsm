@@ -1,1 +1,0 @@
-/usr/bin/cc   -rdynamic CMakeFiles/FSM.dir/examples/ex_fsm.o CMakeFiles/FSM.dir/src/fsm.o CMakeFiles/FSM.dir/src/delay.o  -o FSM 

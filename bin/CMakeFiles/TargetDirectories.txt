@@ -1,3 +1,0 @@
-/home/amin/Project/osfsm/bin/CMakeFiles/edit_cache.dir
-/home/amin/Project/osfsm/bin/CMakeFiles/rebuild_cache.dir
-/home/amin/Project/osfsm/bin/CMakeFiles/FSM.dir
