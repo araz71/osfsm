@@ -24,7 +24,6 @@
 
 #define TIMER_UNINIT_VALUE		0xFF
 
-#define FSM_AUTO_STEP
 #define FSM_BREAK				return
 #define FSM_CURRENT_STEP		fsm->step
 #define FSM_NEXT_STEP			fsm->step + 1
@@ -32,21 +31,14 @@
 #define FSM_LAST_STEP			fsm->step - 1
 
 #ifdef FSM_SUPPORT_SIGNAL
-#define SIGNAL_READY(SIGNAL)		fsm_signal_ready(fsm, SIGNAL)
-#define SIGNAL_REG(SIGNAL)			fsm_signal_register(fsm, SIGNAL)
-#define SIGNAL_UNREG(SIGNAL)		fsm_signal_unregister(fsm, SIGNAL)
-#define SIGNAL_CLEAR(SIGNAL)		fsm->signal_flags &= ~SIGNAL
-#endif
-
-#ifdef FSM_SUPPORT_SIGNAL
 typedef enum {
-	SIGNAL_EXIT			= 0x01,
-	SIGNAL_SLEEP		= 0x02,
-	SIGNAL_USR_1		= 0x04,
-	SIGNAL_USR_2		= 0x08,
-	SIGNAL_USR_3		= 0x10,
-	SIGNAL_USR_4		= 0x20,
-	SIGNAL_USR_5		= 0x40,
+	SIGNAL_EXIT		= 0x01,
+	SIGNAL_SLEEP	= 0x02,
+	SIGNAL_USR_1	= 0x04,
+	SIGNAL_USR_2	= 0x08,
+	SIGNAL_USR_3	= 0x10,
+	SIGNAL_USR_4	= 0x20,
+	SIGNAL_USR_5	= 0x40,
 } signal_enu;
 #endif
 
@@ -61,13 +53,13 @@ typedef enum {
 	FSM_MUTEX_7		= 0x0040,
 	FSM_MUTEX_8		= 0x0080,
 	FSM_MUTEX_9		= 0x0100,
-	FSM_MUTEX_10		= 0x0200,
-	FSM_MUTEX_11		= 0x0400,
-	FSM_MUTEX_12		= 0x0800,
-	FSM_MUTEX_13		= 0x1000,
-	FSM_MUTEX_14		= 0x2000,
-	FSM_MUTEX_15		= 0x4000,
-	FSM_MUTEX_16		= 0x8000,
+	FSM_MUTEX_10	= 0x0200,
+	FSM_MUTEX_11	= 0x0400,
+	FSM_MUTEX_12	= 0x0800,
+	FSM_MUTEX_13	= 0x1000,
+	FSM_MUTEX_14	= 0x2000,
+	FSM_MUTEX_15	= 0x4000,
+	FSM_MUTEX_16	= 0x8000,
 } fsm_mutex_enu;
 #endif
 
