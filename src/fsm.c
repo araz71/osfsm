@@ -16,12 +16,16 @@ static stimer timers[TIMER_AVAL];
 static uint16_t fsm_mutex = 0;
 
 void mutex_lock(fsm_mutex_enu mutex) {
+#ifdef DEBUG_MUTEX
 	mlog("Mutex %d locked", mutex);
+#endif
 	fsm_mutex |= mutex;
 }
 
 void mutex_unlock(fsm_mutex_enu mutex) {
+#ifdef DEBUG_MUTEX
 	mlog("Mutex %d unlocked", mutex);
+#endif
 	fsm_mutex &= ~mutex;
 }
 
@@ -37,17 +41,23 @@ uint8_t fsm_mutex_check(fsm_mutex_enu mutex) {
 
 void fsm_mutex_lock(sfsm* fsm, fsm_mutex_enu mutex) {
 	if (fsm_mutex & mutex) {
+#ifdef DEBUG_MUTEX
 		mlog("FSM[%s] waits for mutex[%d]", fsm->machine_name, mutex);
+#endif
 		fsm->status = FSM_WAIT_FOR_MUTEX;
 		fsm->mutex |= mutex;
 	} else {
+#ifdef DEBUG_MUTEX
 		mlog("Mutex[%d] locked for FSM[%s]", mutex, fsm->machine_name);
+#endif
 		fsm_mutex |= mutex;
 	}
 }
 
 void fsm_mutex_unlock(sfsm* fsm, fsm_mutex_enu mutex) {
+#ifdef DEBUG_MUTEX
 	mlog("Mutex[%d] unlocked by FSM[%s]", mutex, fsm->machine_name);
+#endif
 	fsm_mutex &= ~mutex;
 	fsm->mutex &= ~mutex;
 }
@@ -57,9 +67,8 @@ sfsm* make_fsm_with_name(void (*machine)(sfsm* fsm), const char* name) {
 	sfsm* this_fsm = make_fsm(machine);
 #ifdef DEBUG
 	this_fsm->machine_name = (char*)name;
-#endif
-
 	mlog("Machine[%s] added", name);
+#endif
 
 	return this_fsm;
 }
@@ -74,8 +83,8 @@ sfsm *make_fsm(void (*machine)(struct fsm_st* fsm))
 			break;
 		}
 	}
+
 	if (fsm == NULL) {
-//		printf("No space avaliable to mke fsm\r\n");
 		assert(0);
 	}
 
