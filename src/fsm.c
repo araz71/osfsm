@@ -30,12 +30,16 @@ void mutex_unlock(fsm_mutex_enu mutex) {
 }
 
 uint8_t mutex_busy(fsm_mutex_enu mutex) {
-	if (fsm_mutex & mutex) return 1;
+	if (fsm_mutex & mutex)
+		return 1;
+
 	return 0;
 }
 
 uint8_t fsm_mutex_check(fsm_mutex_enu mutex) {
-	if (!(fsm_mutex & mutex)) return 1;
+	if (!(fsm_mutex & mutex))
+		return 1;
+
 	return 0;
 }
 
@@ -84,9 +88,8 @@ sfsm *make_fsm(void (*machine)(struct fsm_st* fsm))
 		}
 	}
 
-	if (fsm == NULL) {
+	if (fsm == NULL)
 		assert(0);
-	}
 
 	memset((uint8_t *)fsm , 0, sizeof(sfsm));
 
@@ -140,9 +143,8 @@ void fsm_make_time_point(sfsm *fsm) {
 }
 
 void fsm_init() {
-	for (int i = 0; i < FSM_AVAL; i++) {
+	for (int i = 0; i < FSM_AVAL; i++)
 		memset((uint8_t *)&machines[i], 0, sizeof(sfsm));
-	}
 }
 
 void fsm_manager()
@@ -151,9 +153,11 @@ void fsm_manager()
 
 	for (int i = 0; i < FSM_AVAL; i++) {
 		fsms = &machines[i];
-		if (fsms->status == FSM_STOP) continue;
 
-		if (fsms->status == FSM_DELAY) {
+		if (fsms->status == FSM_STOP)
+			continue;
+
+		else if (fsms->status == FSM_DELAY) {
 			if (delay_ms(fsms->timestamp, fsms->delay)) {
 				fsms->timestamp = get_timestamp();
 				fsms->status = FSM_RUN;
@@ -167,9 +171,9 @@ void fsm_manager()
 				fsms->status = FSM_RUN;
 			}
 
-		} else if (fsms->status == FSM_RUN) {
+		} else if (fsms->status == FSM_RUN)
 			fsms->machine(fsms);
-		}
+
 #ifdef FSM_SUPPORT_SIGNAL
 		else if (fsms->status == FSM_BLOCK_FOR_SIGNAL) {
 			if (fsms->signals == 0) {
@@ -230,12 +234,15 @@ uint8_t fsm_make_timer(uint32_t delay, void (*callback)(uint32_t arg), uint32_t 
 		}
 	}
 
-	if (timer_aval == TIMER_UNINIT_VALUE) return TIMER_UNINIT_VALUE;
+	if (timer_aval == TIMER_UNINIT_VALUE)
+		return TIMER_UNINIT_VALUE;
+
 	timers[timer_aval].timestamp = get_timestamp();
 	timers[timer_aval].state = TIMER_RUN;
 	timers[timer_aval].callback = callback;
 	timers[timer_aval].delay = delay;
 	timers[timer_aval].arg = arg;
+
 	return timer_aval;
 }
 
