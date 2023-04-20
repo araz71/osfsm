@@ -70,15 +70,14 @@ void fsm_mutex_unlock(sfsm* fsm, fsm_mutex_enu mutex) {
 sfsm* make_fsm_with_name(void (*machine)(sfsm* fsm), const char* name) {
 	sfsm* this_fsm = make_fsm(machine);
 #ifdef DEBUG
-	this_fsm->machine_name = (char*)name;
+	this_fsm->machine_name = (char*) name;
 	mlog("Machine[%s] added", name);
 #endif
 
 	return this_fsm;
 }
 
-sfsm *make_fsm(void (*machine)(struct fsm_st* fsm))
-{
+sfsm *make_fsm(void (*machine)(struct fsm_st* fsm)) {
 	sfsm *fsm = NULL;
 
 	for (int i = 0; i < FSM_AVAL; i++) {
