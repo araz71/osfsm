@@ -133,7 +133,6 @@ uint8_t mutex_busy(fsm_mutex_enu mutex);
 
 struct fsm_st *make_fsm(void (*machine)(struct fsm_st* fsm));
 sfsm *make_fsm_with_name(void (*machine)(sfsm* fsm), const char *name);
-void fsm_stop(struct fsm_st* fsm);
 
 void fsm_delay(struct fsm_st *fsm, uint32_t delay);
 void fsm_delay_jump(sfsm *fsm, uint32_t delay, uint16_t step);
