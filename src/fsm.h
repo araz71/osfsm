@@ -136,6 +136,8 @@ sfsm *make_fsm_with_name(void (*machine)(sfsm* fsm), const char *name);
 
 void fsm_delay(struct fsm_st *fsm, uint32_t delay);
 void fsm_delay_jump(sfsm *fsm, uint32_t delay, uint16_t step);
+#define FSM_DELAY(delay) fsm_delay(fsm, delay);
+#define FSM_JUMP(delay, state) fsm_delay_jump(fsm, delay, state);
 
 void fsm_wait(struct fsm_st *fsm, uint8_t (*wait_callback)(void), uint32_t delay);
 void fsm_wait_jump(sfsm *fsm, uint8_t (*wait_callback)(void), uint32_t delay, uint16_t step);
