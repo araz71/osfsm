@@ -30,6 +30,9 @@
 #define FSM_GO_NEXT				fsm->step++
 #define FSM_LAST_STEP			fsm->step - 1
 
+#define FSM_STEP_BEGIN(STEP)	if (fsm->step == STEP) {
+#define FSM_STEP_END()			}
+
 #ifdef FSM_SUPPORT_SIGNAL
 typedef enum {
 	SIGNAL_EXIT		= 0x01,
@@ -143,19 +146,19 @@ sfsm *make_fsm_with_name(void (*machine)(sfsm* fsm), const char *name);
 
 void fsm_delay(struct fsm_st *fsm, uint32_t delay);
 void fsm_delay_jump(sfsm *fsm, uint32_t delay, uint16_t step);
-#define FSM_WAIT_FOR_DELAY(DELAY) fsm_delay(fsm, delay)
-#define FSM_JUMP_AFTER_DELAY(DELAY, STATE) fsm_delay_jump(fsm, delay, state)
+#define FSM_WAIT_FOR_DELAY(DELAY) fsm_delay(fsm, DELAY); return
+#define FSM_JUMP_AFTER_DELAY(DELAY, STATE) fsm_delay_jump(fsm, DELAY, STATE); return
 
 void fsm_wait(struct fsm_st *fsm, uint8_t (*wait_callback)(void), uint32_t delay);
 void fsm_wait_jump(sfsm *fsm, uint8_t (*wait_callback)(void), uint32_t delay, uint16_t step);
-#define FSM_WAIT_FOR_JOB(JOB, TIMEOUT) fsm_wait(fsm, JOB, TIMEOUT)
-#define FSM_JUMP_AFTER_JOB(JOB, TIMEOUT, STATE)	fsm_wait_jump(fsm, JOB, TIMEOUT, STATE)
+#define FSM_WAIT_FOR_JOB(JOB, TIMEOUT) fsm_wait(fsm, JOB, TIMEOUT); return
+#define FSM_JUMP_AFTER_JOB(JOB, TIMEOUT, STATE)	fsm_wait_jump(fsm, JOB, TIMEOUT, STATE); return
 
 #ifdef FSM_SUPPORT_SIGNAL
 void fsm_signal(signal_enu signal);
 void fsm_wait_for_signal(sfsm *fsm, signal_enu signal, uint16_t step);
 #define EMIT_SIGNAL(SIGNAL)	fsm_signal(SIGNAL)
-#define FSM_JUMP_AFTER_SIGNAL(SIGNAL, STATE) fsm_wait_for_signal(fsm, SIGNAL, STATE)
+#define FSM_JUMP_AFTER_SIGNAL(SIGNAL, STATE) fsm_wait_for_signal(fsm, SIGNAL, STATE); return
 #endif
 
 void fsm_sleep(sfsm *fsm);
@@ -169,4 +172,7 @@ void fsm_init();
 uint8_t fsm_make_timer(uint32_t delay, void (*callback)(uint32_t arg), uint32_t arg);
 void fsm_timer_stop(uint8_t* timer);
 void fsm_timer_restart(uint8_t timer);
+#define SCHEDULE_JOB(JOB, ARG, DELAY) return fsm_make_timer(DELAY, JOB, ARG)
+#define RESCHEDULE_JOB(SCHEDULE_ID) fsm_timer_restart(SCHEDULE_ID)
+
 #endif
