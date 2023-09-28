@@ -29,6 +29,7 @@
 #define FSM_NEXT_STEP			fsm->step + 1
 #define FSM_GO_NEXT				fsm->step++
 #define FSM_LAST_STEP			fsm->step - 1
+#define FSM_JUMP(STEP)			fsm->step = STEP; return
 
 #define FSM_STEP_BEGIN(STEP)	if (fsm->step == STEP) {
 #define FSM_STEP_END()			}
