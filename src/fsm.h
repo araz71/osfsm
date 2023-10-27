@@ -33,6 +33,7 @@
 
 #define FSM_STEP_BEGIN(STEP)	if (fsm->step == STEP) {
 #define FSM_STEP_END()			}
+#define in_step(STEP)			if (fsm->step == STEP)
 
 #ifdef FSM_SUPPORT_SIGNAL
 typedef enum {
