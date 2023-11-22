@@ -67,7 +67,7 @@ void fsm_mutex_unlock(sfsm* fsm, fsm_mutex_enu mutex) {
 }
 #endif
 
-sfsm* make_fsm_with_name(void (*machine)(sfsm* fsm), const char* name) {
+sfsm* make_fsm_with_name(void (*machine)(sfsm* fsm), __attribute__((unused)) const char* name) {
 	sfsm* this_fsm = make_fsm(machine);
 #ifdef DEBUG
 	this_fsm->machine_name = (char*) name;
@@ -94,10 +94,6 @@ sfsm *make_fsm(void (*machine)(struct fsm_st* fsm)) {
 
 	fsm->machine = machine;
 	fsm->status = FSM_RUN;
-
-#ifdef DEBUG
-	fsm->machine_name = (char *)__FUNCTION__;
-#endif
 
 	return fsm;
 }

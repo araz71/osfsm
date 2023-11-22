@@ -92,17 +92,17 @@ struct fsm_st
 	void (*machine)(struct fsm_st* fsm);
 
 	fsm_status_enu status;
-	uint16_t step;
+	uint16_t step;			// Keeps fsm state
 
 	uint64_t timestamp;
-	uint32_t delay;
+	uint32_t delay;			// Keeps delay value requested by user
 
 #ifdef FSM_SUPPORT_SIGNAL
-	uint8_t signals;
+	uint8_t signals;		// Each bit represents a signal
 #endif
 
 #ifdef FSM_SUPPORT_MUTEX
-	uint16_t mutex;
+	uint16_t mutex;			// Each bit represents a mutex
 #endif
 
 	uint8_t block_template;
