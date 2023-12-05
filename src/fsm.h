@@ -137,10 +137,10 @@ uint8_t mutex_busy(fsm_mutex_enu mutex);
 
 #define FSM_JUMP_AFTER_MUTEX(MUTEX, STATE) fsm->step = STATE;	\
 											fsm_mutex_lock(fsm, MUTEX)
-#define FSM_WAIT_FOR_MUTEX(MUTEX) fsm_mutex_lock(fsm, MUTEX)
+#define FSM_WAIT_FOR_MUTEX(MUTEX)	fsm_mutex_lock(fsm, MUTEX)
 
-#define FSM_MUTEX_UNLOCK(MUTEX) fsm_mutex_unlock(fsm, MUTEX)
-#define FSM_MUTEX_CHECK(MUTEX) mutex_busy(mutex)
+#define FSM_MUTEX_UNLOCK(MUTEX)		fsm_mutex_unlock(fsm, MUTEX)
+#define FSM_MUTEX_CHECK(MUTEX)		mutex_busy(mutex)
 #endif
 
 struct fsm_st *make_fsm(void (*machine)(struct fsm_st* fsm));
@@ -148,19 +148,19 @@ sfsm *make_fsm_with_name(void (*machine)(sfsm* fsm), const char *name);
 
 void fsm_delay(struct fsm_st *fsm, uint32_t delay);
 void fsm_delay_jump(sfsm *fsm, uint32_t delay, uint16_t step);
-#define FSM_WAIT_FOR_DELAY(DELAY) fsm_delay(fsm, DELAY); return
-#define FSM_JUMP_AFTER_DELAY(DELAY, STATE) fsm_delay_jump(fsm, DELAY, STATE); return
+#define FSM_WAIT_FOR_DELAY(DELAY)				fsm_delay(fsm, DELAY); return
+#define FSM_JUMP_AFTER_DELAY(DELAY, STATE)		fsm_delay_jump(fsm, DELAY, STATE); return
 
 void fsm_wait(struct fsm_st *fsm, uint8_t (*wait_callback)(void), uint32_t delay);
 void fsm_wait_jump(sfsm *fsm, uint8_t (*wait_callback)(void), uint32_t delay, uint16_t step);
-#define FSM_WAIT_FOR_JOB(JOB, TIMEOUT) fsm_wait(fsm, JOB, TIMEOUT); return
-#define FSM_JUMP_AFTER_JOB(JOB, TIMEOUT, STATE)	fsm_wait_jump(fsm, JOB, TIMEOUT, STATE); return
+#define FSM_WAIT_FOR_JOB(JOB, TIMEOUT)				fsm_wait(fsm, JOB, TIMEOUT); return
+#define FSM_JUMP_AFTER_JOB(JOB, TIMEOUT, STATE)		fsm_wait_jump(fsm, JOB, TIMEOUT, STATE); return
 
 #ifdef FSM_SUPPORT_SIGNAL
 void fsm_signal(signal_enu signal);
 void fsm_wait_for_signal(sfsm *fsm, signal_enu signal, uint16_t step);
-#define EMIT_SIGNAL(SIGNAL)	fsm_signal(SIGNAL)
-#define FSM_JUMP_AFTER_SIGNAL(SIGNAL, STATE) fsm_wait_for_signal(fsm, SIGNAL, STATE); return
+#define EMIT_SIGNAL(SIGNAL)						fsm_signal(SIGNAL)
+#define FSM_JUMP_AFTER_SIGNAL(SIGNAL, STATE)	fsm_wait_for_signal(fsm, SIGNAL, STATE); return
 #endif
 
 void fsm_sleep(sfsm *fsm);
@@ -174,7 +174,10 @@ void fsm_init();
 uint8_t fsm_make_timer(uint32_t delay, void (*callback)(uint32_t arg), uint32_t arg);
 void fsm_timer_stop(uint8_t* timer);
 void fsm_timer_restart(uint8_t timer);
-#define SCHEDULE_JOB(JOB, ARG, DELAY) return fsm_make_timer(DELAY, JOB, ARG)
-#define RESCHEDULE_JOB(SCHEDULE_ID) fsm_timer_restart(SCHEDULE_ID)
+#define SCHEDULE_JOB(JOB, ARG, DELAY)	fsm_make_timer(DELAY, JOB, ARG)
+#define RESCHEDULE_JOB(SCHEDULE_ID)		fsm_timer_restart(SCHEDULE_ID)
+
+#define MAKE_FSM(X)				void fsm_##X(sfsm* fsm)
+#define ADD_FSM(X)				make_fsm_with_name(&fsm_##X, #X)
 
 #endif
