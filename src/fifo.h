@@ -2,9 +2,9 @@
 #define _FIFO_H_
 
 #include <stdint.h>
-#include <string.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define FIFO_INIT_VALUE		0xFF
 
@@ -81,4 +81,34 @@ void fifo_clear(uint8_t _fifo_id);
  */
 uint16_t fifo_size(uint8_t _fifo_id);
 
+#define BUILD_FIFO(NAME, TYPE, SIZE)			\
+static TYPE fifo_##NAME[SIZE];					\
+static uint8_t fifo_id_##NAME;					\
+void init_##NAME() {							\
+	fifo_id_##NAME = fifo_req((uint8_t*)fifo_##NAME, sizeof(TYPE), SIZE);	\
+}												\
+void push_##NAME(TYPE* data) {					\
+	fifo_push(fifo_id_##NAME, (uint8_t*)data);	\
+}												\
+TYPE* pop_##NAME() {							\
+	return (TYPE*)(fifo_pop(fifo_id_##NAME));	\
+}                                               \
+uint8_t isempty_##NAME() {                      \
+    return fifo_empty(fifo_id_##NAME);          \
+}                                               \
+void clear_##NAME() {                          \
+    fifo_clear(fifo_id_##NAME);                 \
+}
+
+/* EXAMPLE :
+    typedef struct {
+        uint8_t code;
+        uint8_t number;
+    } event_st;
+    PREPARE_FIFO(event, event_st, 20);)
+    ...
+    init_event();
+    event_st ev{10, 20};
+    push_event(&ev);
+*/
 #endif
