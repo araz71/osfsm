@@ -16,6 +16,11 @@ struct Fifo_st {
 
 uint8_t FifoCntr = 0;
 
+void fifo_init() {
+	FifoCntr = 0;
+	memset((uint8_t*)Fifo, 0, sizeof(struct Fifo_st) * FIFO_MAX_AVAL);
+}
+
 uint8_t fifo_req(uint8_t *_ptr, uint16_t _size, uint16_t _max_elem_aval) {
 	if (FifoCntr >= FIFO_MAX_AVAL) {
 		assert(0);

@@ -8,6 +8,8 @@
 
 #define FIFO_INIT_VALUE		0xFF
 
+void fifo_init();
+
 /*
  * Creates FIFO and returns it's id
  *

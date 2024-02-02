@@ -3,6 +3,11 @@
 static sshm shms[SHM_MAX];
 static uint8_t shm_counter = 0;
 
+void shm_init() {
+	memset((uint8_t*)shms, 0, sizeof(sshm) * SHM_MAX);
+	shm_counter = 0;
+}
+
 uint8_t shm_lock(shm_id id, char* pid) {
 	if (shms[id].lock == 0 || (uint32_t)shms[id].pid == (uint32_t)pid) {
 		shms[id].lock = 1;
