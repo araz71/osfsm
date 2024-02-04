@@ -8,10 +8,12 @@
 #ifndef IO_SCANNER_H_
 #define IO_SCANNER_H_
 
-#include <def.h>
-#include <delay.h>
+#include <fsm_def.h>
 
 #ifdef IO_SCANNER_MAX_AVAL
+
+#include <def.h>
+#include <delay.h>
 
 void io_scanner_add(GPIO_TypeDef* port, uint8_t pin, uint8_t trig_is_high,
 		void (*trig_callback)(void), void (*untrig_callback)(void));
