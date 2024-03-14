@@ -89,16 +89,16 @@ static uint8_t fifo_id_##NAME;					\
 void init_##NAME() {							\
 	fifo_id_##NAME = fifo_req((uint8_t*)fifo_##NAME, sizeof(TYPE), SIZE);	\
 }												\
-void push_##NAME(TYPE* data) {					\
+static void push_##NAME(TYPE* data) {					\
 	fifo_push(fifo_id_##NAME, (uint8_t*)data);	\
 }												\
-TYPE* pop_##NAME() {							\
+static TYPE* pop_##NAME() {							\
 	return (TYPE*)(fifo_pop(fifo_id_##NAME));	\
 }                                               \
-uint8_t isempty_##NAME() {                      \
+static uint8_t isempty_##NAME() {                      \
     return fifo_empty(fifo_id_##NAME);          \
 }                                               \
-void clear_##NAME() {                          \
+__attribute__((unused)) static void clear_##NAME() {                          \
     fifo_clear(fifo_id_##NAME);                 \
 }
 
