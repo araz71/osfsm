@@ -10,6 +10,8 @@
 
 #ifdef IO_SCANNER_MAX_AVAL
 
+#pragma pack(push)
+#pragma pack(1)
 typedef struct {
 	GPIO_TypeDef *port;
 	uint8_t pin;
@@ -21,6 +23,7 @@ typedef struct {
 	void (*trig_callback)();
 	void (*untrig_callback)();
 } io_scanner_st;
+#pragma pack(pop)
 
 static uint8_t io_cntr = 0;
 static io_scanner_st ios[IO_SCANNER_MAX_AVAL];

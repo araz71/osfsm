@@ -10,12 +10,14 @@ typedef uint8_t shm_id;
 
 #define SHM_MAX		2
 
+#pragma pack(push)
+#pragma pack(1)
 typedef struct {
 	uint8_t *ptr;
-
 	uint8_t lock;
 	char* pid;
 } sshm;
+#pragma pack(pop)
 
 void shm_init();
 uint8_t shm_lock(shm_id id, char* pid);
