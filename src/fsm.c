@@ -239,9 +239,7 @@ uint8_t fsm_make_timer(uint32_t delay, void (*callback)(uint32_t arg), uint32_t 
 		}
 	}
 
-	if (timer_aval == TIMER_UNINIT_VALUE) {
-		return TIMER_UNINIT_VALUE;
-	}
+	assert(timer_aval != TIMER_UNINIT_VALUE);
 
 	timers[timer_aval].timestamp = get_timestamp();
 	timers[timer_aval].state = TIMER_RUN;
