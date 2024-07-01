@@ -20,8 +20,9 @@ typedef struct {
 #pragma pack(pop)
 
 void shm_init();
-uint8_t shm_lock(shm_id id, char* pid);
-uint8_t shm_unlock(shm_id id, char* pid);
+uint8_t shm_lock(shm_id id, const char* pid);
+uint8_t shm_unlock(shm_id id, const char* pid);
 shm_id shm_add(void* pointer2buf);
 uint8_t* shm_get(shm_id id);
+
 #endif
