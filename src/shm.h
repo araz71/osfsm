@@ -8,7 +8,7 @@
 
 typedef uint8_t shm_id;
 
-#define SHM_MAX		2
+#define SHM_MAX		1
 
 #pragma pack(push)
 #pragma pack(1)

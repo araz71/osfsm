@@ -4,7 +4,7 @@ static sshm shms[SHM_MAX];
 static uint8_t shm_counter = 0;
 
 void shm_init() {
-	memset((uint8_t*)shms, 0, sizeof(sshm) * SHM_MAX);
+	memset((uint8_t*) shms, 0, sizeof(sshm) * SHM_MAX);
 	shm_counter = 0;
 }
 
