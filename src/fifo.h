@@ -100,6 +100,9 @@ static uint8_t isempty_##NAME() {                      \
 }                                               \
 __attribute__((unused)) static void clear_##NAME() {                          \
     fifo_clear(fifo_id_##NAME);                 \
+}	\
+__attribute__((unused)) static uint8_t size_##NAME() {	\
+	return fifo_size(fifo_id_##NAME);	\
 }
 
 /* EXAMPLE :
