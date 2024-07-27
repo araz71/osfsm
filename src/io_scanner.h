@@ -15,7 +15,7 @@
 #include <def.h>
 #include <delay.h>
 
-void io_scanner_add(GPIO_TypeDef* port, uint8_t pin, uint8_t trig_is_high,
+void io_scanner_add(uint8_t (*reader_callback)(void), uint8_t trig_is_high,
 		void (*trig_callback)(void), void (*untrig_callback)(void));
 
 void io_scanner();

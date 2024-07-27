@@ -15,7 +15,7 @@ typedef uint8_t shm_id;
 typedef struct {
 	uint8_t *ptr;
 	uint8_t lock;
-	char* pid;
+	const char* pid;
 } sshm;
 #pragma pack(pop)
 
