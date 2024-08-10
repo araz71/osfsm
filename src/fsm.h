@@ -136,7 +136,9 @@ void mutex_unlock(fsm_mutex_enu mutex);
 uint8_t mutex_busy(fsm_mutex_enu mutex);
 
 #define FSM_JUMP_AFTER_MUTEX(MUTEX, STATE) 			fsm->step = STATE;	\
-														fsm_mutex_lock(fsm, MUTEX)
+														fsm_mutex_lock(fsm, MUTEX);	\
+														return
+
 #define FSM_WAIT_FOR_MUTEX(MUTEX)					fsm_mutex_lock(fsm, MUTEX)
 
 #define FSM_MUTEX_UNLOCK(MUTEX)						fsm_mutex_unlock(fsm, MUTEX)
