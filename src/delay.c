@@ -26,12 +26,12 @@ uint8_t delay_s(uint64_t timestamp, uint32_t delay) {
 }
 
 void wait_s(uint32_t delay) {
-	volatile uint64_t ts = get_timestamp();
+	uint64_t ts = get_timestamp();
 	delay = delay * 1000;
 	while (!delay_ms(ts, delay));
 }
 
 void wait_ms(uint32_t delay) {
-	volatile uint64_t ts = get_timestamp();
+	uint64_t ts = get_timestamp();
 	while (!delay_ms(ts, delay));
 }
