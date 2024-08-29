@@ -71,7 +71,7 @@ void fsm_mutex_unlock(sfsm* fsm, fsm_mutex_enu mutex) {
 sfsm* make_fsm_with_name(void (*machine)(sfsm* fsm), __attribute__((unused)) const char* name) {
 	sfsm* this_fsm = make_fsm(machine);
 #ifdef DEBUG
-	this_fsm->machine_name = (char*) name;
+	this_fsm->machine_name = (char *) name;
 	mlog("Machine[%s] added", name);
 #endif
 
@@ -214,8 +214,9 @@ void fsm_wait_for_signal(sfsm *fsm, signal_enu signal, uint16_t step) {
 	fsm->status = FSM_BLOCK_FOR_SIGNAL;
 	fsm->signals |= signal;
 	fsm->step = step;
-
+#ifdef DEBUG
 	mlog("FSM[%s] sleeped for signal[%d]", fsm->machine_name, signal);
+#endif
 }
 
 void fsm_signal(signal_enu signal) {
@@ -224,7 +225,9 @@ void fsm_signal(signal_enu signal) {
 		fsm = &machines[i];
 		if (fsm->signals & signal) {
 			fsm->signals &= ~signal;
+#ifdef DEBUG
 			mlog("Send signal[%d] to FSM[%s]", signal, fsm->machine_name);
+#endif
 		}
 	}
 }
