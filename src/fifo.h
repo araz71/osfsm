@@ -95,10 +95,10 @@ static void push_##NAME(TYPE* data) {					\
 static TYPE* pop_##NAME() {							\
 	return (TYPE*)(fifo_pop(fifo_id_##NAME));	\
 }                                               \
-static uint8_t isempty_##NAME() {                      \
+__attribute__((unused)) static uint8_t isempty_##NAME() {                      \
     return fifo_empty(fifo_id_##NAME);          \
 }                                               \
-__attribute__((unused)) static void clear_##NAME() {                          \
+__attribute__((unused)) static void clear_##NAME() {	\
     fifo_clear(fifo_id_##NAME);                 \
 }	\
 __attribute__((unused)) static uint8_t size_##NAME() {	\
@@ -106,6 +106,9 @@ __attribute__((unused)) static uint8_t size_##NAME() {	\
 }	\
 __attribute__((unused)) static uint8_t isfull_##NAME() {	\
 	return fifo_full(fifo_id_##NAME);	\
+}	\
+__attribute__((unused)) static TYPE* pop_stay_##NAME() {	\
+	return (TYPE*) fifo_pop_stay(fifo_id_##NAME);	\
 }
 
 /* EXAMPLE :
