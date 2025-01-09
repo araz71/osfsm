@@ -92,13 +92,13 @@ void init_##NAME() {							\
 static void push_##NAME(TYPE* data) {					\
 	fifo_push(fifo_id_##NAME, (uint8_t*)data);	\
 }												\
-static TYPE* pop_##NAME() {							\
+__attribute__((unused)) static TYPE* pop_##NAME() {							\
 	return (TYPE*)(fifo_pop(fifo_id_##NAME));	\
 }                                               \
 __attribute__((unused)) static uint8_t isempty_##NAME() {                      \
     return fifo_empty(fifo_id_##NAME);          \
 }                                               \
-__attribute__((unused)) static void clear_##NAME() {	\
+__attribute__((unused)) static void clear_##NAME() {                          \
     fifo_clear(fifo_id_##NAME);                 \
 }	\
 __attribute__((unused)) static uint8_t size_##NAME() {	\

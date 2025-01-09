@@ -1,7 +1,7 @@
 #include <fifo.h>
 #include <assert.h>
 
-#define FIFO_MAX_AVAL	5
+#define FIFO_MAX_AVAL	6
 
 #pragma pack(push)
 #pragma pack(1)
