@@ -109,9 +109,7 @@ struct fsm_st
 
 	uint8_t (*flag_callback)(void);
 
-#ifdef DEBUG
 	char *machine_name;
-#endif
 };
 
 typedef struct {
@@ -172,6 +170,8 @@ void fsm_make_time_point(struct fsm_st *fsm);
 
 void fsm_manager();
 void fsm_init();
+
+sfsm* fsm_get_by_name(const char* name);
 
 uint8_t fsm_make_timer(uint32_t delay, void (*callback)(uint32_t arg), uint32_t arg);
 void fsm_timer_stop(uint8_t* timer);
