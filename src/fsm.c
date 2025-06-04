@@ -140,13 +140,11 @@ void fsm_make_time_point(sfsm *fsm) {
 }
 
 void fsm_init() {
-	for (int i = 0; i < FSM_AVAL; i++) {
+	for (int i = 0; i < FSM_AVAL; i++)
 		memset((uint8_t *)&machines[i], 0, sizeof(sfsm));
-	}
 
-	for (int i = 0; i < TIMER_AVAL; i++) {
+	for (int i = 0; i < TIMER_AVAL; i++)
 		memset((uint8_t *)&timers[i], 0, sizeof(stimer));
-	}
 }
 
 void fsm_manager()
