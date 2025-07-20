@@ -70,8 +70,8 @@ void fsm_mutex_unlock(sfsm* fsm, fsm_mutex_enu mutex) {
 
 sfsm* make_fsm_with_name(void (*machine)(sfsm* fsm), __attribute__((unused)) const char* name) {
 	sfsm* this_fsm = make_fsm(machine);
-#ifdef DEBUG
 	this_fsm->machine_name = (char *) name;
+#ifdef DEBUG
 	mlog("Machine[%s] added", name);
 #endif
 
@@ -277,4 +277,11 @@ void fsm_timer_restart(uint8_t timer) {
 	}
 }
 
-
+sfsm* fsm_get_by_name(const char* name) {
+	for (uint8_t fsm_counter = 0; fsm_counter < FSM_AVAL; fsm_counter++) {
+		if (strcmp(name, machines[fsm_counter].machine_name) == 0) {
+			return &machines[fsm_counter];
+		}
+	}
+	return NULL;
+}
