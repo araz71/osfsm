@@ -35,6 +35,8 @@
 #define FSM_STEP_END()			}
 #define in_step(STEP)			if (fsm->step == STEP)
 
+#define IN_BEGIN				0
+
 #ifdef FSM_SUPPORT_SIGNAL
 typedef enum {
 	SIGNAL_EXIT		= 0x01,

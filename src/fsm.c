@@ -176,7 +176,16 @@ void fsm_manager()
 
 		}
 		else if (fsms->status == FSM_RUN) {
+#ifdef FSM_MEASURE_TIME_COST
+			uint64_t start = get_timestamp();
+#endif
 			fsms->machine(fsms);
+#ifdef FSM_MEASURE_TIME_COST
+			uint64_t stop = get_timestamp();
+#ifdef DEBUG
+			mlog("FSM[%s] costs %d milliseconds\r\n", fsms->machine_name, stop - start);
+#endif
+#endif
 		}
 
 #ifdef FSM_SUPPORT_SIGNAL
