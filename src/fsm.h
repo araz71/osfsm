@@ -173,6 +173,8 @@ void fsm_init();
 
 sfsm* fsm_get_by_name(const char* name);
 
+void fsm_force_to_run_on(sfsm* fsm, uint8_t step);
+
 uint8_t fsm_make_timer(uint32_t delay, void (*callback)(uint32_t arg), uint32_t arg);
 void fsm_timer_stop(uint8_t* timer);
 void fsm_timer_restart(uint8_t timer);

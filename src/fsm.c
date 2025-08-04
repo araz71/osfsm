@@ -274,3 +274,9 @@ sfsm* fsm_get_by_name(const char* name) {
 	}
 	return NULL;
 }
+
+void fsm_force_to_run_on(sfsm* fsm, uint8_t step) {
+	fsm->status = FSM_RUN;
+	fsm->timestamp = get_timestamp();
+	fsm->step = step;
+}
