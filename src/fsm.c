@@ -11,7 +11,10 @@
 #include <assert.h>
 
 static sfsm machines[FSM_AVAL];
+
+#ifdef TIMER_AVAL
 static stimer timers[TIMER_AVAL];
+#endif
 
 #ifdef FSM_SUPPORT_MUTEX
 static uint16_t fsm_mutex = 0;
@@ -140,13 +143,13 @@ void fsm_make_time_point(sfsm *fsm) {
 }
 
 void fsm_init() {
-	for (int i = 0; i < FSM_AVAL; i++) {
+	for (int i = 0; i < FSM_AVAL; i++)
 		memset((uint8_t *)&machines[i], 0, sizeof(sfsm));
-	}
 
-	for (int i = 0; i < TIMER_AVAL; i++) {
+#ifdef TIMER_AVAL
+	for (int i = 0; i < TIMER_AVAL; i++)
 		memset((uint8_t *)&timers[i], 0, sizeof(stimer));
-	}
+#endif
 }
 
 void fsm_manager()
@@ -208,6 +211,7 @@ void fsm_manager()
 #endif
 	}
 
+#ifdef TIMER_AVAL
 	for (int i = 0; i < TIMER_AVAL; i++) {
 		if (timers[i].state == TIMER_RUN) {
 			if (delay_ms(timers[i].timestamp, timers[i].delay)) {
@@ -216,6 +220,7 @@ void fsm_manager()
 			}
 		}
 	}
+#endif
 }
 
 #ifdef FSM_SUPPORT_SIGNAL
@@ -242,6 +247,7 @@ void fsm_signal(signal_enu signal) {
 }
 #endif
 
+#ifdef TIMER_AVAL
 uint8_t fsm_make_timer(uint32_t delay, void (*callback)(uint32_t arg), uint32_t arg) {
 	uint8_t timer_aval = TIMER_UNINIT_VALUE;
 	for (uint8_t i = 0; i < TIMER_AVAL; i++) {
@@ -276,6 +282,7 @@ void fsm_timer_restart(uint8_t timer) {
 		timers[timer].timestamp = get_timestamp();
 	}
 }
+#endif
 
 sfsm* fsm_get_by_name(const char* name) {
 	for (uint8_t fsm_counter = 0; fsm_counter < FSM_AVAL; fsm_counter++) {
@@ -284,4 +291,10 @@ sfsm* fsm_get_by_name(const char* name) {
 		}
 	}
 	return NULL;
+}
+
+void fsm_force_to_run_on(sfsm* fsm, uint8_t step) {
+	fsm->status = FSM_RUN;
+	fsm->timestamp = get_timestamp();
+	fsm->step = step;
 }

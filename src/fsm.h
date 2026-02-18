@@ -18,10 +18,6 @@
 #error "Please set how many fsm do you have with defining FSM_AVAL"
 #endif
 
-#ifndef TIMER_AVAL
-#error "Please set how many timer do you have with defining TIMER_AVAL"
-#endif
-
 #define TIMER_UNINIT_VALUE		0xFF
 
 #define FSM_BREAK				return
@@ -175,6 +171,9 @@ void fsm_init();
 
 sfsm* fsm_get_by_name(const char* name);
 
+void fsm_force_to_run_on(sfsm* fsm, uint8_t step);
+
+#ifdef TIMER_AVAL
 typedef uint8_t TimerId;
 TimerId fsm_make_timer(uint32_t delay, void (*callback)(uint32_t arg), uint32_t arg);
 void fsm_timer_stop(TimerId* timer);
@@ -182,6 +181,7 @@ void fsm_timer_restart(TimerId timer);
 #define SCHEDULE_JOB(JOB, ARG, DELAY)				fsm_make_timer(DELAY, JOB, ARG)
 #define RESCHEDULE_JOB(SCHEDULE_ID)					fsm_timer_restart(SCHEDULE_ID)
 #define SCHEDULE_STOP(SCHEDULE_ID)					fsm_timer_stop(&SCHEDULE_ID)
+#endif
 
 #define MAKE_FSM(X)				\
 void fsm_##X(sfsm* fsm)
