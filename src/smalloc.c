@@ -29,7 +29,6 @@ void smem_free(uint8_t *mem_addr) {
         offset /= SMALLOC_PAGE_SIZE;
         smalloc_pages[offset].allocated = 0;
         for (int i = 0; i < smalloc_pages[offset].page_len; i++) {
-            printf("free %d\r\n", offset + i);
             smalloc_pages[offset + i].allocated = 0;
         }
     }
@@ -39,13 +38,10 @@ void smem_print() {
     for (int i = 0; i < SMALLOC_PAGES_AVAL; i++) {
         if (smalloc_pages[i].allocated) {
             if (smalloc_pages[i].page_len == 1) {
-                printf("page %d allocated\r\n", i);
             } else if (smalloc_pages[i].page_len > 1) {
-                printf("page %d to %d are allocated\r\n", i, i + smalloc_pages[i].page_len - 1);
                 i += smalloc_pages[i].page_len;
                 i--;
             } else {
-                printf("error on %d\r\n", i);
             }
         }
     }

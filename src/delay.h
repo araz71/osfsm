@@ -36,6 +36,7 @@ void wait_ms(uint32_t delay);
 uint8_t delay_ms(uint64_t timestamp, uint32_t delay);
 
 uint8_t delay_s(uint64_t timestamp, uint32_t delay);
+uint8_t delay_m(uint64_t timestamp, uint32_t delay);
 
 #ifdef MY_DELAY
 extern uint64_t get_timestamp();

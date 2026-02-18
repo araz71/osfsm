@@ -175,11 +175,13 @@ void fsm_init();
 
 sfsm* fsm_get_by_name(const char* name);
 
-uint8_t fsm_make_timer(uint32_t delay, void (*callback)(uint32_t arg), uint32_t arg);
-void fsm_timer_stop(uint8_t* timer);
-void fsm_timer_restart(uint8_t timer);
+typedef uint8_t TimerId;
+TimerId fsm_make_timer(uint32_t delay, void (*callback)(uint32_t arg), uint32_t arg);
+void fsm_timer_stop(TimerId* timer);
+void fsm_timer_restart(TimerId timer);
 #define SCHEDULE_JOB(JOB, ARG, DELAY)				fsm_make_timer(DELAY, JOB, ARG)
 #define RESCHEDULE_JOB(SCHEDULE_ID)					fsm_timer_restart(SCHEDULE_ID)
+#define SCHEDULE_STOP(SCHEDULE_ID)					fsm_timer_stop(&SCHEDULE_ID)
 
 #define MAKE_FSM(X)				\
 void fsm_##X(sfsm* fsm)
