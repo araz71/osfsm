@@ -7,12 +7,12 @@
 #include <delay.h>
 
 
-#ifndef MY_DELAY
-volatile uint64_t system_tick_cntr = 0;
-uint64_t get_timestamp() {
+extern uint64_t system_tick_cntr;
+
+uint64_t __attribute__((weak))  get_timestamp() {
 	return system_tick_cntr;
 }
-#endif
+
 
 uint8_t delay_ms(uint64_t timestamp, uint32_t delay) {
 	if ((get_timestamp() - timestamp) >= delay)
