@@ -1,3 +1,5 @@
+#ifdef OSFSM_MODEL
+
 #include "osfsm_model.h"
 
 static pthread_t osfsm_thread;
@@ -29,3 +31,5 @@ void osfsm_model_init() {
 #endif
 	pthread_create(&osfsm_thread, NULL, osfsm_handler, NULL);
 }
+
+#endif
